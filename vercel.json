@@ -1,0 +1,17 @@
+{
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "src/app/api/$1"
+    }
+  ],
+  "env": {
+    "REDIS_URL": "@castercard-redis-url"
+  }
+}
