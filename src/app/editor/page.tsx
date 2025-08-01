@@ -30,8 +30,21 @@ export default function EditorPage() {
   }, [isAuthenticated, profile]);
 
   const fetchUserData = async (fid: number) => {
+    if (!profile?.signature || !profile?.signer || !profile?.message) return;
+    
     try {
-      const response = await fetch(`/api/user-stats`);
+      const response = await fetch('/api/user-stats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fid,
+          message: profile.message,
+          signature: profile.signature,
+          address: profile.signer
+        }),
+      });
       const data = await response.json();
       setUserData(data);
     } catch (error) {
