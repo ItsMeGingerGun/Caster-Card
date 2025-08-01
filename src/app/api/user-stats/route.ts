@@ -1,25 +1,31 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/lib/auth';
 import { getUserStats } from '@/app/lib/neynarClient';
 import { NextResponse } from 'next/server';
 import { getRedisClient } from '@/app/lib/redis';
+import { verifySignature } from '@/app/lib/auth';
 
-// Cache stats in Redis for 1 hour
-const CACHE_TTL = 3600; 
-
-export async function GET() {
-  const session = await getServerSession(authOptions);
+export async function POST(req: Request) {
+  const { fid, message, signature, address } = await req.json();
   
-  if (!session?.user?.fid) {
+  if (!fid || !message || !signature || !address) {
     return NextResponse.json(
-      { error: 'Unauthorized' },
+      { error: 'Missing required parameters' },
+      { status: 400 }
+    );
+  }
+
+  // Verify the signature
+  const isValid = await verifySignature(message, signature, address);
+  
+  if (!isValid) {
+    return NextResponse.json(
+      { error: 'Invalid signature' },
       { status: 401 }
     );
   }
 
   try {
     const redis = getRedisClient();
-    const cacheKey = `user:${session.user.fid}:stats`;
+    const cacheKey = `user:${fid}:stats`;
     
     // Try to get cached stats
     const cachedStats = await redis.get(cacheKey);
@@ -28,10 +34,10 @@ export async function GET() {
     }
     
     // Fetch fresh stats
-    const userData = await getUserStats(session.user.fid);
+    const userData = await getUserStats(fid);
     
     // Cache the response
-    await redis.set(cacheKey, JSON.stringify(userData), 'EX', CACHE_TTL);
+    await redis.setex(cacheKey, 3600, JSON.stringify(userData));
     
     return NextResponse.json(userData);
   } catch (error) {
