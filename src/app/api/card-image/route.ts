@@ -16,21 +16,51 @@ export async function GET(req: NextRequest) {
     
     return new ImageResponse(
       (
-        <div tw="flex w-full h-full bg-gray-900 text-white p-10">
-          <div tw="flex flex-col w-full h-full items-center justify-center border-4 border-purple-600 rounded-3xl p-8">
-            <div tw="flex items-center mb-8">
+        <div style={{
+          display: 'flex',
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#1f2937',
+          color: '#ffffff',
+          padding: '40px'
+        }}>
+          <div style={{
+            display: 'flex',
+            width: '100%',
+            height: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '4px solid #8b5cf6',
+            borderRadius: '24px',
+            padding: '32px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '32px' }}>
               <img 
                 src={userData.pfpUrl} 
-                tw="w-24 h-24 rounded-full mr-6 border-4 border-indigo-500" 
+                style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  borderRadius: '50%',
+                  border: '4px solid #8b5cf6',
+                  marginRight: '20px'
+                }} 
                 alt="Profile"
               />
-              <div tw="flex flex-col">
-                <h1 tw="text-4xl font-bold">@{userData.username}</h1>
-                <p tw="text-xl text-gray-300 mt-2 max-w-md">{userData.bio || 'Farcaster user'}</p>
+              <div>
+                <h1 style={{ fontSize: '32px', fontWeight: 'bold' }}>@{userData.username}</h1>
+                <p style={{ fontSize: '18px', opacity: 0.8, maxWidth: '400px' }}>
+                  {userData.bio || 'Farcaster user'}
+                </p>
               </div>
             </div>
             
-            <div tw="flex w-full justify-around mt-8">
+            <div style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-around',
+              marginTop: '24px'
+            }}>
               <StatItem icon="✍️" value={userData.casts} label="Casts" />
               <StatItem icon="💬" value={userData.replies} label="Replies" />
               <StatItem icon="👥" value={userData.followers} label="Followers" />
@@ -55,12 +85,12 @@ export async function GET(req: NextRequest) {
 
 function StatItem({ icon, value, label }: { icon: string; value: number; label: string }) {
   return (
-    <div tw="flex flex-col items-center">
-      <div tw="flex items-center text-3xl mb-2">
-        <span tw="mr-2">{icon}</span>
-        <span tw="font-bold">{value}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', fontSize: '24px', marginBottom: '4px' }}>
+        <span style={{ marginRight: '4px' }}>{icon}</span>
+        <span style={{ fontWeight: 'bold' }}>{value}</span>
       </div>
-      <span tw="text-gray-400">{label}</span>
+      <span style={{ opacity: 0.8, fontSize: '14px' }}>{label}</span>
     </div>
   );
 }
