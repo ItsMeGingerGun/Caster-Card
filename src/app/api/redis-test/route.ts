@@ -16,13 +16,14 @@ export async function GET() {
     
     return NextResponse.json({
       status: 'success',
-      redis: 'connected'
+      redis: 'connected',
+      environment: process.env.NODE_ENV
     });
   } catch (error: any) {
     return NextResponse.json({
       status: 'error',
       message: error.message,
-      redis_url: process.env.REDIS_URL
+      redis_url: process.env.REDIS_URL ? 'set' : 'missing'
     }, { status: 500 });
   }
 }
