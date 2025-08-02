@@ -5,7 +5,6 @@ import StatBadge from '../components/StatBadge';
 import { ScoreRadial } from '../components/ScoreRadial';
 import { generateCardImage } from '../lib/cardRenderer';
 import { saveAs } from 'file-saver';
-import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function EditorPage() {
   const { user, loading } = useAuth();
@@ -52,25 +51,6 @@ export default function EditorPage() {
           saveAs(blob, `caster-card-${user?.username || 'user'}.png`);
         }
       }, 'image/png');
-    }
-  };
-
-  const shareToWarpcast = async () => {
-    if (!user) return;
-
-    try {
-      await sdk.actions.cast({
-        text: `Check out my Farcaster stats! Made with @castercard`,
-        embeds: [
-          {
-            url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
-          },
-        ],
-      });
-      alert('Shared to Warpcast successfully!');
-    } catch (error) {
-      console.error('Sharing failed:', error);
-      alert('Failed to share to Warpcast');
     }
   };
 
@@ -159,12 +139,6 @@ export default function EditorPage() {
                 className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
               >
                 Download
-              </button>
-              <button 
-                onClick={shareToWarpcast}
-                className="px-5 py-2 bg-green-600 rounded-lg hover:bg-green-700 font-medium"
-              >
-                Share to Warpcast
               </button>
             </div>
           </div>
