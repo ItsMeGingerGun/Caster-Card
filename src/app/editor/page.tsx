@@ -14,6 +14,7 @@ export default function EditorPage() {
     accentColor: '#8b5cf6',
   });
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const generateCard = async () => {
@@ -28,8 +29,9 @@ export default function EditorPage() {
         },
         body: JSON.stringify({
           userData: {
-            pfpUrl: user.pfpUrl,
+            fid: user.fid,
             username: user.username,
+            pfpUrl: user.pfpUrl,
             bio: user.bio || '',
             casts: user.casts,
             replies: user.replies,
@@ -48,15 +50,16 @@ export default function EditorPage() {
       const imageBlob = await response.blob();
       
       // Update canvas preview
-      if (canvasRef.current) {
+      if (canvasRef.current && imageBlob) {
         const ctx = canvasRef.current.getContext('2d');
         const img = new Image();
         img.onload = () => {
           if (ctx && canvasRef.current) {
-            canvasRef.current.width = img.width;
-            canvasRef.current.height = img.height;
-            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            ctx.drawImage(img, 0, 0);
+            // Set fixed dimensions
+            canvasRef.current.width = 800;
+            canvasRef.current.height = 400;
+            ctx.clearRect(0, 0, 800, 400);
+            ctx.drawImage(img, 0, 0, 800, 400);
           }
           setIsGenerating(false);
         };
@@ -70,17 +73,23 @@ export default function EditorPage() {
 
   const downloadCard = () => {
     if (canvasRef.current) {
-      canvasRef.current.toBlob((blob) => {
-        if (blob) {
-          saveAs(blob, `caster-card-${user?.username || 'user'}.png`);
-        }
-      }, 'image/png');
+      try {
+        canvasRef.current.toBlob((blob) => {
+          if (blob) {
+            saveAs(blob, `caster-card-${user?.username || 'user'}.png`);
+          }
+        }, 'image/png');
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Failed to download card');
+      }
     }
   };
 
   const shareToWarpcast = async () => {
     if (!user) return;
 
+    setIsSharing(true);
     try {
       await sdk.actions.cast({
         text: `Check out my Farcaster stats! Made with @castercard`,
@@ -94,8 +103,23 @@ export default function EditorPage() {
     } catch (error) {
       console.error('Sharing failed:', error);
       alert('Failed to share to Warpcast');
+    } finally {
+      setIsSharing(false);
     }
   };
+
+  useEffect(() => {
+    // Initialize canvas with default background
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        canvasRef.current.width = 800;
+        canvasRef.current.height = 400;
+        ctx.fillStyle = themeConfig.backgroundColor;
+        ctx.fillRect(0, 0, 800, 400);
+      }
+    }
+  }, [themeConfig.backgroundColor]);
 
   if (loading) {
     return (
@@ -185,9 +209,14 @@ export default function EditorPage() {
               </button>
               <button 
                 onClick={shareToWarpcast}
-                className="px-5 py-2 bg-green-600 rounded-lg hover:bg-green-700 font-medium"
+                disabled={isSharing}
+                className={`px-5 py-2 rounded-lg font-medium ${
+                  isSharing 
+                    ? 'bg-gray-700 cursor-not-allowed' 
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
               >
-                Share to Warpcast
+                {isSharing ? 'Sharing...' : 'Share to Warpcast'}
               </button>
             </div>
           </div>
