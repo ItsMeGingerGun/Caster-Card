@@ -16,26 +16,6 @@ export default function EditorPage() {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [templates, setTemplates] = useState<any[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [isSavingTemplate, setIsSavingTemplate] = useState(false);
-
-  useEffect(() => {
-    if (user?.fid) {
-      loadTemplates();
-    }
-  }, [user]);
-
-  const loadTemplates = async () => {
-    if (!user?.fid) return;
-    try {
-      const response = await fetch('/api/templates');
-      const data = await response.json();
-      setTemplates(data);
-    } catch (error) {
-      console.error('Failed to load templates:', error);
-    }
-  };
 
   const generateCard = async () => {
     if (!user) return;
@@ -94,47 +74,6 @@ export default function EditorPage() {
     }
   };
 
-  const handleSaveTemplate = async () => {
-    if (!user?.fid) return;
-    
-    setIsSavingTemplate(true);
-    try {
-      const response = await fetch('/api/templates', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          theme_config: JSON.stringify(themeConfig),
-          is_public: false,
-        }),
-      });
-      
-      const { id } = await response.json();
-      await loadTemplates();
-      setSelectedTemplate(id);
-      
-      setIsSavingTemplate(false);
-    } catch (error) {
-      console.error('Template save error:', error);
-      setIsSavingTemplate(false);
-    }
-  };
-
-  const handleLoadTemplate = async (templateId: string) => {
-    try {
-      const response = await fetch(`/api/templates?id=${templateId}`);
-      const template = await response.json();
-      
-      if (template) {
-        setThemeConfig(JSON.parse(template.theme_config));
-        setSelectedTemplate(templateId);
-      }
-    } catch (error) {
-      console.error('Template load error:', error);
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -190,39 +129,6 @@ export default function EditorPage() {
             </div>
             <div className="mt-6 text-sm text-gray-400">
               <p>Member since: {new Date(user.registeredAt).toLocaleDateString()}</p>
-            </div>
-
-            {/* Template Selection */}
-            <div className="mt-6">
-              <h3 className="font-medium mb-2">Your Templates</h3>
-              <div className="space-y-2 max-h-60 overflow-y-auto">
-                {templates.length === 0 ? (
-                  <p className="text-gray-400 text-sm">No templates saved yet</p>
-                ) : (
-                  templates.map(template => (
-                    <div 
-                      key={template.id}
-                      className={`p-3 rounded-lg cursor-pointer ${
-                        selectedTemplate === template.id 
-                          ? 'bg-indigo-900 border border-indigo-500' 
-                          : 'bg-gray-700 hover:bg-gray-600'
-                      }`}
-                      onClick={() => handleLoadTemplate(template.id)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm truncate">
-                          Template {new Date(template.created_at).toLocaleDateString()}
-                        </span>
-                        {template.is_public && (
-                          <span className="text-xs bg-green-800 text-green-200 px-2 py-1 rounded">
-                            Public
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
             </div>
           </div>
 
@@ -304,20 +210,6 @@ export default function EditorPage() {
                   />
                   <span className="text-gray-400">{themeConfig.accentColor}</span>
                 </div>
-              </div>
-              
-              <div className="pt-4 border-t border-gray-700">
-                <button 
-                  onClick={handleSaveTemplate}
-                  disabled={isSavingTemplate}
-                  className={`w-full py-3 rounded-lg font-medium ${
-                    isSavingTemplate
-                      ? 'bg-gray-700 cursor-not-allowed'
-                      : 'bg-indigo-600 hover:bg-indigo-700'
-                  }`}
-                >
-                  {isSavingTemplate ? 'Saving...' : 'Save as Template'}
-                </button>
               </div>
             </div>
           </div>
