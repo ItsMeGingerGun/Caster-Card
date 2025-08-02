@@ -1,5 +1,4 @@
 import { ImageResponse } from '@vercel/og';
-import { NextRequest } from 'next/server';
 
 export async function generateCardImage(userData: any, themeConfig: any) {
   try {
