@@ -1,4 +1,4 @@
-import { verifyQuickAuth } from '@farcaster/miniapp-sdk/server';
+import { verifyQuickAuth } from '@farcaster/miniapp-sdk';
 import { getUserStats } from '@/app/lib/neynarClient';
 import { NextResponse } from 'next/server';
 
