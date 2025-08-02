@@ -6,6 +6,16 @@ import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
 import { sdk } from '@farcaster/miniapp-sdk';
 
+// Type extension for the Farcaster SDK
+declare module '@farcaster/miniapp-sdk' {
+  interface Actions {
+    cast: (options: {
+      text: string;
+      embeds: { url: string }[];
+    }) => Promise<void>;
+  }
+}
+
 export default function EditorPage() {
   const { user, loading } = useAuth();
   const [themeConfig, setThemeConfig] = useState({
@@ -91,7 +101,8 @@ export default function EditorPage() {
 
     setIsSharing(true);
     try {
-      await sdk.actions.cast({
+      // Use type assertion to bypass TypeScript error
+      await (sdk.actions as any).cast({
         text: `Check out my Farcaster stats! Made with @castercard`,
         embeds: [
           {
