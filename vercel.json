@@ -10,8 +10,5 @@
       "src": "/api/(.*)",
       "dest": "src/app/api/$1"
     }
-  ],
-  "env": {
-    "REDIS_URL": "@castercard-redis-url"
-  }
+  ]
 }
