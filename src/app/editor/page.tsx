@@ -1,16 +1,14 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
-import { useProfile } from '@farcaster/auth-kit';
-import AuthButton from '../components/AuthButton';
+import { useAuth } from '../lib/AuthContext';
 import StatBadge from '../components/StatBadge';
 import { ScoreRadial } from '../components/ScoreRadial';
 import { generateCardImage } from '../lib/cardRenderer';
 import { saveAs } from 'file-saver';
-import { Warpcast } from 'warpcast';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function EditorPage() {
-  const { profile, isAuthenticated } = useProfile();
-  const [userData, setUserData] = useState<any>(null);
+  const { user, loading } = useAuth();
   const [themeConfig, setThemeConfig] = useState({
     backgroundColor: '#1f2937',
     textColor: '#ffffff',
@@ -23,37 +21,13 @@ export default function EditorPage() {
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated && profile?.fid) {
-      fetchUserData(profile.fid);
+    if (user?.fid) {
       loadTemplates();
     }
-  }, [isAuthenticated, profile]);
-
-  const fetchUserData = async (fid: number) => {
-    if (!profile?.signature || !profile?.signer || !profile?.message) return;
-    
-    try {
-      const response = await fetch('/api/user-stats', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fid,
-          message: profile.message,
-          signature: profile.signature,
-          address: profile.signer
-        }),
-      });
-      const data = await response.json();
-      setUserData(data);
-    } catch (error) {
-      console.error('Failed to fetch user stats:', error);
-    }
-  };
+  }, [user]);
 
   const loadTemplates = async () => {
-    if (!profile?.fid) return;
+    if (!user?.fid) return;
     try {
       const response = await fetch('/api/templates');
       const data = await response.json();
@@ -64,11 +38,11 @@ export default function EditorPage() {
   };
 
   const generateCard = async () => {
-    if (!userData) return;
+    if (!user) return;
     
     setIsGenerating(true);
     try {
-      const imageBlob = await generateCardImage(userData, themeConfig);
+      const imageBlob = await generateCardImage(user, themeConfig);
       
       // Update canvas preview
       if (canvasRef.current) {
@@ -95,22 +69,21 @@ export default function EditorPage() {
     if (canvasRef.current) {
       canvasRef.current.toBlob((blob) => {
         if (blob) {
-          saveAs(blob, `caster-card-${userData?.username || 'user'}.png`);
+          saveAs(blob, `caster-card-${user?.username || 'user'}.png`);
         }
       }, 'image/png');
     }
   };
 
   const shareToWarpcast = async () => {
-    if (!userData || !profile) return;
+    if (!user) return;
 
     try {
-      const warpcast = new Warpcast();
-      await warpcast.composeCast({
+      await sdk.actions.cast({
         text: `Check out my Farcaster stats! Made with @castercard`,
         embeds: [
           {
-            url: `${window.location.origin}/api/card-image?fid=${userData.fid}`,
+            url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
           },
         ],
       });
@@ -122,7 +95,7 @@ export default function EditorPage() {
   };
 
   const handleSaveTemplate = async () => {
-    if (!profile?.fid) return;
+    if (!user?.fid) return;
     
     setIsSavingTemplate(true);
     try {
@@ -162,20 +135,25 @@ export default function EditorPage() {
     }
   };
 
-  if (!isAuthenticated) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
-        <p className="text-gray-300 mb-8">Sign in to create your card</p>
-        <AuthButton />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
   }
 
-  if (!userData) {
+  if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
+        <p className="text-gray-300 mb-8">Sign in to create your card</p>
+        <button 
+          onClick={() => sdk.actions.redirect()}
+          className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
+        >
+          Sign in with Farcaster
+        </button>
       </div>
     );
   }
@@ -189,11 +167,11 @@ export default function EditorPage() {
           </h1>
           <div className="flex items-center">
             <img 
-              src={userData.pfpUrl} 
-              alt={userData.username}
+              src={user.pfpUrl} 
+              alt={user.username}
               className="w-10 h-10 rounded-full mr-3"
             />
-            <span className="text-gray-300">@{userData.username}</span>
+            <span className="text-gray-300">@{user.username}</span>
           </div>
         </header>
 
@@ -202,16 +180,16 @@ export default function EditorPage() {
           <div className="bg-gray-800 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Your Stats</h2>
             <div className="grid grid-cols-2 gap-4">
-              <StatBadge icon="✍️" value={userData.casts} label="Casts" />
-              <StatBadge icon="💬" value={userData.replies} label="Replies" />
-              <StatBadge icon="👥" value={userData.followers} label="Followers" />
-              <StatBadge icon="👀" value={userData.following} label="Following" />
+              <StatBadge icon="✍️" value={user.casts} label="Casts" />
+              <StatBadge icon="💬" value={user.replies} label="Replies" />
+              <StatBadge icon="👥" value={user.followers} label="Followers" />
+              <StatBadge icon="👀" value={user.following} label="Following" />
             </div>
             <div className="mt-6 flex justify-center">
-              <ScoreRadial score={userData.score} />
+              <ScoreRadial score={user.score} />
             </div>
             <div className="mt-6 text-sm text-gray-400">
-              <p>Member since: {new Date(userData.registeredAt).toLocaleDateString()}</p>
+              <p>Member since: {new Date(user.registeredAt).toLocaleDateString()}</p>
             </div>
 
             {/* Template Selection */}
