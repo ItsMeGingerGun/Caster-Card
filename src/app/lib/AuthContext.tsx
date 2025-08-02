@@ -1,11 +1,33 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 
-const AuthContext = createContext<any>(null);
+interface User {
+  fid: number;
+  username: string;
+  pfpUrl: string;
+  bio: string;
+  displayName: string;
+  followers: number;
+  following: number;
+  casts: number;
+  replies: number;
+  score: number;
+  registeredAt: string;
+}
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(null);
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+}
+
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+});
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
