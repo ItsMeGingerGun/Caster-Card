@@ -16,7 +16,7 @@ export async function getUserStats(fid: number) {
       (casts.length * 0.3) +
       (replies * 0.2) +
       (user.result.user.following_count * 0.1)
-    );
+    ));
 
     return {
       fid: user.result.user.fid,
