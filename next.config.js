@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove serverComponentsExternalPackages since we removed Redis
   images: {
     remotePatterns: [
       {
@@ -9,7 +8,6 @@ const nextConfig = {
       },
     ],
   },
-  // Add webpack config to ignore node modules
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
