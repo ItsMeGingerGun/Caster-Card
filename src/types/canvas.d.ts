@@ -17,13 +17,11 @@ declare module 'canvas' {
   }
 
   export interface CanvasRenderingContext2D {
-    // Add essential methods you need
     clearRect(x: number, y: number, w: number, h: number): void;
     drawImage(image: Image, dx: number, dy: number): void;
     fillRect(x: number, y: number, w: number, h: number): void;
     fillText(text: string, x: number, y: number): void;
     measureText(text: string): { width: number };
-    // Add other methods as needed
   }
 
   export function createCanvas(width: number, height: number): Canvas;
