@@ -6,6 +6,11 @@ export const runtime = 'edge';
 export async function POST(req: NextRequest) {
   const { userData, themeConfig } = await req.json();
 
+  // Add validation
+  if (!userData || !themeConfig) {
+    return new Response('Invalid request body', { status: 400 });
+  }
+  
   try {
     return new ImageResponse(
       (
