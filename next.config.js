@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["ioredis"],
-  },
+  // Remove serverComponentsExternalPackages since we removed Redis
   images: {
     remotePatterns: [
       {
@@ -10,6 +8,18 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+  },
+  // Add webpack config to ignore node modules
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      net: false,
+      tls: false,
+      dns: false,
+      stream: false,
+      crypto: false,
+    };
+    return config;
   },
 };
 
