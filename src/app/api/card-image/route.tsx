@@ -22,7 +22,9 @@ export async function GET(req: NextRequest) {
           height: '100%',
           backgroundColor: '#1f2937',
           color: '#ffffff',
-          padding: '40px'
+          padding: '40px',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
           <div style={{
             display: 'flex',
