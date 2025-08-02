@@ -62,10 +62,10 @@ export async function generateCardImage(userData: any, themeConfig: any) {
               justifyContent: 'space-around',
               marginTop: '32px'
             }}>
-              {renderStat('✍️', userData.casts, 'Casts', themeConfig.textColor)}
-              {renderStat('💬', userData.replies, 'Replies', themeConfig.textColor)}
-              {renderStat('👥', userData.followers, 'Followers', themeConfig.textColor)}
-              {renderStat('⭐', userData.score, 'Score', themeConfig.textColor)}
+              <StatItem icon="✍️" value={userData.casts} label="Casts" color={themeConfig.textColor} />
+              <StatItem icon="💬" value={userData.replies} label="Replies" color={themeConfig.textColor} />
+              <StatItem icon="👥" value={userData.followers} label="Followers" color={themeConfig.textColor} />
+              <StatItem icon="⭐" value={userData.score} label="Score" color={themeConfig.textColor} />
             </div>
           </div>
         </div>
@@ -88,7 +88,12 @@ export async function generateCardImage(userData: any, themeConfig: any) {
   }
 }
 
-function renderStat(icon: string, value: number, label: string, color: string) {
+function StatItem({ icon, value, label, color }: { 
+  icon: string; 
+  value: number; 
+  label: string;
+  color: string;
+}) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', fontSize: '28px', marginBottom: '8px' }}>
