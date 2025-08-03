@@ -6,17 +6,18 @@ import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
 import { sdk } from '@farcaster/miniapp-sdk';
 
-// Simplified type extension for the Farcaster SDK
-declare module '@farcaster/miniapp-sdk' {
-  interface Actions {
-    cast: (options: {
-      text: string;
-      embeds: { url: string }[];
-    }) => Promise<void>;
-    redirect: (options?: { url?: string }) => Promise<void>;
-    ready: (options?: any) => Promise<void>; // Simplified to avoid duplicate types
-  }
-}
+// Create a custom type for the SDK actions we need
+type CustomSDKActions = {
+  cast: (options: {
+    text: string;
+    embeds: { url: string }[];
+  }) => Promise<void>;
+  redirect: (options?: { url?: string }) => Promise<void>;
+  ready: (options?: any) => Promise<void>;
+};
+
+// Type assertion for sdk.actions
+const customSDK = sdk.actions as CustomSDKActions;
 
 export default function EditorPage() {
   const { user, loading } = useAuth();
@@ -103,7 +104,7 @@ export default function EditorPage() {
 
     setIsSharing(true);
     try {
-      await sdk.actions.cast({
+      await customSDK.cast({
         text: `Check out my Farcaster stats! Made with @castercard`,
         embeds: [
           {
@@ -147,7 +148,7 @@ export default function EditorPage() {
         <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
         <p className="text-gray-300 mb-8">Sign in to create your card</p>
         <button 
-          onClick={() => sdk.actions.redirect()}
+          onClick={() => customSDK.redirect()}
           className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
         >
           Sign in with Farcaster
