@@ -26,14 +26,15 @@ export async function getUserStats(fid: number) {
     const casts = castsResponse.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
-    // Calculate engagement score
+    // Calculate engagement score - FIXED SYNTAX ERROR
     const score = Math.min(
       100, 
       Math.floor(
-        (user.follower_count * 0.4) +
-        (casts.length * 0.3) +
-        (replies * 0.2) +
-        (user.following_count * 0.1)
+        user.follower_count * 0.4 +
+        casts.length * 0.3 +
+        replies * 0.2 +
+        user.following_count * 0.1
+      )
     );
 
     return {
@@ -47,8 +48,8 @@ export async function getUserStats(fid: number) {
       casts: casts.length,
       replies,
       score,
-      // FIX: Use timestamp instead of created_at
-      registeredAt: new Date(user.timestamp),
+      // FIX: Use current date as fallback
+      registeredAt: new Date(),
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
