@@ -19,6 +19,21 @@ type CustomSDKActions = {
 // Type assertion for sdk.actions with fallback
 const customSDK: CustomSDKActions = sdk.actions as any;
 
+// Type for Farcaster context location
+interface FarcasterContextLocation {
+  type: string;
+  cast?: {
+    author: {
+      fid: number;
+      username: string;
+      displayName: string;
+      pfpUrl: string;
+    };
+    hash: string;
+    text: string;
+  };
+}
+
 export default function EditorPage() {
   const { user, loading } = useAuth();
   const [themeConfig, setThemeConfig] = useState({
@@ -28,7 +43,24 @@ export default function EditorPage() {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [appContext, setAppContext] = useState<FarcasterContextLocation | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    // Fetch Farcaster context when component mounts
+    const fetchContext = async () => {
+      try {
+        const context = await sdk.context;
+        if (context?.location) {
+          setAppContext(context.location);
+        }
+      } catch (error) {
+        console.error('Failed to fetch Farcaster context:', error);
+      }
+    };
+    
+    fetchContext();
+  }, []);
 
   const generateCard = async () => {
     if (!user) return;
@@ -107,19 +139,17 @@ export default function EditorPage() {
 
     setIsSharing(true);
     try {
-      // Check if cast method is available
       if (!customSDK.cast) {
         throw new Error('Sharing feature is not available in this context');
       }
 
-      // Check if we're in a cast embed context
       let shareText = `Check out my Farcaster stats! Made with @castercard`;
       
       // Add context if available
-      if (sdk.context?.location?.type === "cast_embed") {
-        shareText = `Replying to @${sdk.context.location.cast.author.username}: Check out my Farcaster stats!`;
-      } else if (sdk.context?.location?.type === "cast_share") {
-        shareText = `Sharing my stats with @${sdk.context.location.cast.author.username}!`;
+      if (appContext?.type === "cast_embed" && appContext.cast) {
+        shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
+      } else if (appContext?.type === "cast_share" && appContext.cast) {
+        shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
       }
 
       await customSDK.cast({
