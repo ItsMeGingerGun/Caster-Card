@@ -5,33 +5,34 @@ export async function getUserStats(fid: number) {
     const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
     
     // Fetch user profile
-    const user = await client.lookupUserByFid(fid);
+    const userResponse = await client.lookupUserByFid(fid);
+    const user = userResponse.result.user;
     
-    // Fetch user's casts - UPDATED METHOD
-    const castsResponse = await client.fetchCasts({ fid, limit: 100 });
-    const casts = castsResponse.casts;
+    // Fetch user's casts using a different method
+    const castsResponse = await client.fetchBulkCasts({fids: [fid], limit: 100});
+    const casts = castsResponse.result.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
     // Calculate engagement score
     const score = Math.min(100, Math.floor(
-      (user.result.user.follower_count * 0.4) +
+      (user.follower_count * 0.4) +
       (casts.length * 0.3) +
       (replies * 0.2) +
-      (user.result.user.following_count * 0.1)
+      (user.following_count * 0.1)
     ));
 
     return {
-      fid: user.result.user.fid,
-      username: user.result.user.username,
-      pfpUrl: user.result.user.pfp_url,
-      bio: user.result.user.profile.bio.text,
-      displayName: user.result.user.display_name,
-      followers: user.result.user.follower_count,
-      following: user.result.user.following_count,
+      fid: user.fid,
+      username: user.username,
+      pfpUrl: user.pfp_url,
+      bio: user.profile.bio.text,
+      displayName: user.display_name,
+      followers: user.follower_count,
+      following: user.following_count,
       casts: casts.length,
       replies,
       score,
-      registeredAt: new Date(user.result.user.registered_at),
+      registeredAt: new Date(user.registered_at),
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
