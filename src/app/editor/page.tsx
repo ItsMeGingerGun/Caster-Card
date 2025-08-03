@@ -6,13 +6,23 @@ import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
 import { sdk } from '@farcaster/miniapp-sdk';
 
-// Type extension for the Farcaster SDK
+// Complete type extension for the Farcaster SDK
 declare module '@farcaster/miniapp-sdk' {
   interface Actions {
     cast: (options: {
       text: string;
       embeds: { url: string }[];
     }) => Promise<void>;
+    redirect: (options?: { url?: string }) => Promise<void>;
+    ready: (options?: Partial<ReadyOptions>) => Promise<void>;
+  }
+
+  interface ReadyOptions {
+    buttonStyle: {
+      backgroundColor: string;
+      color: string;
+      borderColor: string;
+    };
   }
 }
 
@@ -101,7 +111,6 @@ export default function EditorPage() {
 
     setIsSharing(true);
     try {
-      // Use type assertion to bypass TypeScript error
       await (sdk.actions as any).cast({
         text: `Check out my Farcaster stats! Made with @castercard`,
         embeds: [
@@ -146,7 +155,7 @@ export default function EditorPage() {
         <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
         <p className="text-gray-300 mb-8">Sign in to create your card</p>
         <button 
-          onClick={() => sdk.actions.redirect()}
+          onClick={() => (sdk.actions as any).redirect()}
           className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
         >
           Sign in with Farcaster
