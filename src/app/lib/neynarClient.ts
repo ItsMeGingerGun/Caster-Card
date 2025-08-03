@@ -2,17 +2,13 @@ import { NeynarAPIClient } from '@neynar/nodejs-sdk';
 
 export async function getUserStats(fid: number) {
   try {
-    // Create client with configuration object
     const client = new NeynarAPIClient({
       apiKey: process.env.NEYNAR_API_KEY!,
     });
     
-    // Fetch user profile
-    const userResponse = await client.fetchBulkUsers([fid]);
-    if (!userResponse.users || userResponse.users.length === 0) {
-      throw new Error('User not found');
-    }
-    const user = userResponse.users[0];
+    // Use lookupUserByFid instead
+    const userResponse = await client.lookupUserByFid(fid);
+    const user = userResponse.result.user;
     
     // Fetch user's casts
     const castsResponse = await client.fetchAllCastsCreatedByUser(fid, { limit: 100 });
