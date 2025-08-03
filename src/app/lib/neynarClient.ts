@@ -34,7 +34,6 @@ export async function getUserStats(fid: number) {
         (casts.length * 0.3) +
         (replies * 0.2) +
         (user.following_count * 0.1)
-      )
     );
 
     return {
@@ -48,8 +47,8 @@ export async function getUserStats(fid: number) {
       casts: casts.length,
       replies,
       score,
-      // FIX: Changed from registered_at to created_at
-      registeredAt: new Date(user.created_at),
+      // FIX: Use timestamp instead of created_at
+      registeredAt: new Date(user.timestamp),
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
