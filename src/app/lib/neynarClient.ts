@@ -6,13 +6,24 @@ export async function getUserStats(fid: number) {
       apiKey: process.env.NEYNAR_API_KEY!,
     });
     
-    // Use lookupUserByFid instead
-    const userResponse = await client.lookupUserByFid(fid);
-    const user = userResponse.result.user;
+    // Fetch user profile using v2 method
+    const userResponse = await client.fetchBulkUsers({
+      fids: [fid],
+      viewerFid: 3 // Optional viewer FID
+    });
     
-    // Fetch user's casts
-    const castsResponse = await client.fetchAllCastsCreatedByUser(fid, { limit: 100 });
-    const casts = castsResponse.result.casts;
+    if (!userResponse.users || userResponse.users.length === 0) {
+      throw new Error('User not found');
+    }
+    const user = userResponse.users[0];
+    
+    // Fetch user's casts using v2 method
+    const castsResponse = await client.fetchCastsForUser({
+      fid,
+      limit: 100,
+      includeReplies: true
+    });
+    const casts = castsResponse.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
     // Calculate engagement score
