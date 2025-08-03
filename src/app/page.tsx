@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react'; // Added useEffect import
+import { useEffect } from 'react';
 import { useAuth } from './lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -48,7 +48,7 @@ export default function Home() {
             <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-6 w-full max-w-xs">
               <p className="text-gray-300 mb-4">Connect to Farcaster to create your card</p>
               <button 
-                onClick={() => sdk.actions.redirect()}
+                onClick={() => sdk.login()}
                 className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium"
               >
                 Sign in with Farcaster
