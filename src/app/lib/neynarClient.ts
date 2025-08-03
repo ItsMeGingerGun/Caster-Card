@@ -3,14 +3,16 @@ import { NeynarAPIClient } from '@neynar/nodejs-sdk';
 export async function getUserStats(fid: number) {
   try {
     const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
+    
+    // Fetch user profile
     const user = await client.lookupUserByFid(fid);
     
-    // Fetch user's casts
-    const castsResponse = await client.fetchUserCasts(fid, { limit: 100 });
-    const casts = castsResponse.result.casts;
+    // Fetch user's casts - UPDATED METHOD
+    const castsResponse = await client.fetchCasts({ fid, limit: 100 });
+    const casts = castsResponse.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
-    // Calculate score
+    // Calculate engagement score
     const score = Math.min(100, Math.floor(
       (user.result.user.follower_count * 0.4) +
       (casts.length * 0.3) +
