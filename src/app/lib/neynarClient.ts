@@ -2,7 +2,10 @@ import { NeynarAPIClient } from '@neynar/nodejs-sdk';
 
 export async function getUserStats(fid: number) {
   try {
-    const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
+    // Create client with configuration object
+    const client = new NeynarAPIClient({
+      apiKey: process.env.NEYNAR_API_KEY!,
+    });
     
     // Fetch user profile
     const userResponse = await client.fetchBulkUsers([fid]);
@@ -11,12 +14,12 @@ export async function getUserStats(fid: number) {
     }
     const user = userResponse.users[0];
     
-    // Fetch user's casts using v2 method
+    // Fetch user's casts
     const castsResponse = await client.fetchAllCastsCreatedByUser(fid, { limit: 100 });
     const casts = castsResponse.result.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
-    // Calculate engagement score - FIXED SYNTAX ERROR
+    // Calculate engagement score
     const score = Math.min(
       100, 
       Math.floor(
