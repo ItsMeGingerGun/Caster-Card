@@ -48,7 +48,8 @@ export async function getUserStats(fid: number) {
       casts: casts.length,
       replies,
       score,
-      registeredAt: new Date(user.registered_at),
+      // FIX: Changed from registered_at to created_at
+      registeredAt: new Date(user.created_at),
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
