@@ -8,16 +8,16 @@ import { sdk } from '@farcaster/miniapp-sdk';
 
 // Create a custom type for the SDK actions we need
 type CustomSDKActions = {
-  cast: (options: {
+  cast?: (options: {
     text: string;
     embeds: { url: string }[];
   }) => Promise<void>;
-  redirect: (options?: { url?: string }) => Promise<void>;
-  ready: (options?: any) => Promise<void>;
+  redirect?: (options?: { url?: string }) => Promise<void>;
+  ready?: (options?: any) => Promise<void>;
 };
 
-// Type assertion for sdk.actions
-const customSDK = sdk.actions as CustomSDKActions;
+// Type assertion for sdk.actions with fallback
+const customSDK: CustomSDKActions = sdk.actions as any;
 
 export default function EditorPage() {
   const { user, loading } = useAuth();
@@ -80,6 +80,7 @@ export default function EditorPage() {
       }
     } catch (error) {
       console.error('Card generation error:', error);
+      alert('Failed to generate card preview. Please try again.');
       setIsGenerating(false);
     }
   };
@@ -90,11 +91,13 @@ export default function EditorPage() {
         canvasRef.current.toBlob((blob) => {
           if (blob) {
             saveAs(blob, `caster-card-${user?.username || 'user'}.png`);
+          } else {
+            throw new Error('Failed to create card image');
           }
         }, 'image/png');
       } catch (error) {
         console.error('Download failed:', error);
-        alert('Failed to download card');
+        alert('Failed to download card. Please try again.');
       }
     }
   };
@@ -104,8 +107,23 @@ export default function EditorPage() {
 
     setIsSharing(true);
     try {
+      // Check if cast method is available
+      if (!customSDK.cast) {
+        throw new Error('Sharing feature is not available in this context');
+      }
+
+      // Check if we're in a cast embed context
+      let shareText = `Check out my Farcaster stats! Made with @castercard`;
+      
+      // Add context if available
+      if (sdk.context?.location?.type === "cast_embed") {
+        shareText = `Replying to @${sdk.context.location.cast.author.username}: Check out my Farcaster stats!`;
+      } else if (sdk.context?.location?.type === "cast_share") {
+        shareText = `Sharing my stats with @${sdk.context.location.cast.author.username}!`;
+      }
+
       await customSDK.cast({
-        text: `Check out my Farcaster stats! Made with @castercard`,
+        text: shareText,
         embeds: [
           {
             url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
@@ -115,7 +133,7 @@ export default function EditorPage() {
       alert('Shared to Warpcast successfully!');
     } catch (error) {
       console.error('Sharing failed:', error);
-      alert('Failed to share to Warpcast');
+      alert(`Failed to share to Warpcast: ${(error as Error).message}`);
     } finally {
       setIsSharing(false);
     }
@@ -148,7 +166,13 @@ export default function EditorPage() {
         <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
         <p className="text-gray-300 mb-8">Sign in to create your card</p>
         <button 
-          onClick={() => customSDK.redirect()}
+          onClick={() => {
+            if (customSDK.redirect) {
+              customSDK.redirect();
+            } else {
+              alert('Redirect feature is not available in this context. Please open in Warpcast.');
+            }
+          }}
           className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
         >
           Sign in with Farcaster
