@@ -19,21 +19,6 @@ type CustomSDKActions = {
 // Type assertion for sdk.actions with fallback
 const customSDK: CustomSDKActions = sdk.actions as any;
 
-// Type for Farcaster context location
-interface FarcasterContextLocation {
-  type: string;
-  cast?: {
-    author: {
-      fid: number;
-      username: string;
-      displayName: string;
-      pfpUrl: string;
-    };
-    hash: string;
-    text: string;
-  };
-}
-
 export default function EditorPage() {
   const { user, loading } = useAuth();
   const [themeConfig, setThemeConfig] = useState({
@@ -43,7 +28,7 @@ export default function EditorPage() {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
-  const [appContext, setAppContext] = useState<FarcasterContextLocation | null>(null);
+  const [appContext, setAppContext] = useState<any>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -146,9 +131,9 @@ export default function EditorPage() {
       let shareText = `Check out my Farcaster stats! Made with @castercard`;
       
       // Add context if available
-      if (appContext?.type === "cast_embed" && appContext.cast) {
+      if (appContext?.type === "cast_embed" && appContext.cast?.author?.username) {
         shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
-      } else if (appContext?.type === "cast_share" && appContext.cast) {
+      } else if (appContext?.type === "cast_share" && appContext.cast?.author?.username) {
         shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
       }
 
