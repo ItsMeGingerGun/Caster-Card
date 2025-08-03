@@ -9,7 +9,7 @@ export async function getUserStats(fid: number) {
     const user = userResponse.result.user;
     
     // Fetch user's casts using the correct method
-    const castsResponse = await client.fetchCastsForUser(fid, { limit: 100 });
+    const castsResponse = await client.fetchAllCastsCreatedByUser(fid, { limit: 100 });
     const casts = castsResponse.result.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
@@ -19,7 +19,7 @@ export async function getUserStats(fid: number) {
       (casts.length * 0.3) +
       (replies * 0.2) +
       (user.following_count * 0.1)
-    ));
+    );
 
     return {
       fid: user.fid,
