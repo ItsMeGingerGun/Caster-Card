@@ -15,9 +15,20 @@ export default function Home() {
     }
   }, [user, router]);
 
-  const handleLogin = () => {
-    // Correct Farcaster authentication method
-    sdk.authenticate();
+  const handleLogin = async () => {
+    // Correct Farcaster authentication method using quickAuth
+    try {
+      // Get authentication token
+      const { token } = await sdk.quickAuth.getToken();
+      
+      // Here you would typically send the token to your backend
+      // For now, we'll just log it and let the AuthContext handle the rest
+      console.log('Farcaster auth token:', token);
+      
+      // The AuthContext should detect the user after this
+    } catch (error) {
+      console.error('Farcaster authentication failed:', error);
+    }
   };
 
   if (loading) {
