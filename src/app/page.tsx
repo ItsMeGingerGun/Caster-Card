@@ -15,6 +15,11 @@ export default function Home() {
     }
   }, [user, router]);
 
+  const handleLogin = () => {
+    // Correct Farcaster authentication method
+    sdk.authenticate();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -48,7 +53,7 @@ export default function Home() {
             <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-6 w-full max-w-xs">
               <p className="text-gray-300 mb-4">Connect to Farcaster to create your card</p>
               <button 
-                onClick={() => sdk.login()}
+                onClick={handleLogin}
                 className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium"
               >
                 Sign in with Farcaster
