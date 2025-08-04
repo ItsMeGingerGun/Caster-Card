@@ -2,7 +2,8 @@ import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 import { getUserStats } from '@/app/lib/neynarClient';
 
-export const runtime = 'edge';
+// Changed runtime to Node.js since Edge doesn't support all needed APIs
+export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
   const fid = req.nextUrl.searchParams.get('fid');
