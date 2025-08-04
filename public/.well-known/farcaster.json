@@ -1,0 +1,44 @@
+{
+  "name": "Caster Card",
+  "icon": "icon-512.png",
+  "start_url": "/",
+  "description": "Create and share your Farcaster stats with a beautiful digital profile card",
+  "app": {
+    "bundle": "web",
+    "bundlePath": "https://caster-card.vercel.app"
+  },
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Card Editor Interface"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Generated Profile Card"
+    }
+  ],
+  "permissions": [
+    "xmtp"
+  ],
+  "accountAssociation": {
+    "header": "tleSI6IjB4NWZBOWE0MmI1MkZjODBEYUI0MTY1NzM2RDlmZjM3ZDI5MTBDZjFENyJ9",
+    "payload": "eaW9uLWdhbWUudmVyY2VsLmFwcCJ9",
+    "signature": "MHhkZWZiNTE3E0ZGM2YjJhYzkxODEzNjliNzJjMTliMTBjN2ZmZTBhMDZjOTk4NTBkYTFi"
+  }
+}
