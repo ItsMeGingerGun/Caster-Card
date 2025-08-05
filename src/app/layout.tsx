@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from './lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -8,21 +8,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 export default function Home() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [sdkInitialized, setSdkInitialized] = useState(false);
 
-  // Initialize Farcaster SDK
-  useEffect(() => {
-    sdk.initialize()
-      .then(() => {
-        setSdkInitialized(true);
-        console.log('Farcaster SDK initialized');
-      })
-      .catch((error) => {
-        console.error('Failed to initialize Farcaster SDK:', error);
-      });
-  }, []);
-
-  // Redirect if user is authenticated
   useEffect(() => {
     if (user) {
       router.push('/editor');
@@ -30,22 +16,22 @@ export default function Home() {
   }, [user, router]);
 
   const handleLogin = async () => {
-    if (!sdkInitialized) {
-      console.warn('Login attempted before SDK initialization');
-      return;
-    }
-    
+    // Correct Farcaster authentication method using quickAuth
     try {
+      // Get authentication token
       const { token } = await sdk.quickAuth.getToken();
+      
+      // Here you would typically send the token to your backend
+      // For now, we'll just log it and let the AuthContext handle the rest
       console.log('Farcaster auth token:', token);
-      // In a real app, you would send this token to your backend for verification
+      
+      // The AuthContext should detect the user after this
     } catch (error) {
       console.error('Farcaster authentication failed:', error);
     }
   };
 
-  // Show loading spinner during initialization or auth check
-  if (loading || !sdkInitialized) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
@@ -79,7 +65,7 @@ export default function Home() {
               <p className="text-gray-300 mb-4">Connect to Farcaster to create your card</p>
               <button 
                 onClick={handleLogin}
-                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium transition-colors duration-300"
+                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium"
               >
                 Sign in with Farcaster
               </button>
@@ -109,7 +95,7 @@ export default function Home() {
             <p>Connect your Farcaster account to get started</p>
             <p className="mt-2">
               By using Caster Card, you agree to our{' '}
-              <Link href="#" className="text-purple-400 hover:underline transition-colors">
+              <Link href="#" className="text-purple-400 hover:underline">
                 Terms of Service
               </Link>
             </p>
@@ -117,7 +103,7 @@ export default function Home() {
         </div>
         
         <footer className="mt-12 text-gray-500 text-sm">
-          <p>Open source project. Contribute on <Link href="#" className="text-indigo-400 hover:underline transition-colors">GitHub</Link></p>
+          <p>Open source project. Contribute on <Link href="#" className="text-indigo-400 hover:underline">GitHub</Link></p>
         </footer>
       </div>
     </main>
