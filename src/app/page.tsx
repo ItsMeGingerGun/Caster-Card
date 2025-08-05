@@ -15,8 +15,8 @@ export default function Home() {
   useEffect(() => {
     const initializeSdk = async () => {
       try {
-        // Initialize SDK with manifest configuration
-        await sdk.configure({
+        // Correct SDK initialization method
+        await sdk.actions.ready({
           version: "1.0.0",
           config: {
             button: { color: "purple", variant: "primary" },
@@ -25,8 +25,6 @@ export default function Home() {
           }
         });
         
-        // Notify client that app is ready
-        sdk.actions.ready();
         setIsInitialized(true);
       } catch (error) {
         console.error('Farcaster SDK initialization failed:', error);
