@@ -15,16 +15,16 @@ export default function Home() {
   useEffect(() => {
     const initializeSdk = async () => {
       try {
-        // Correct SDK initialization method
-        await sdk.actions.ready({
+        // Set configuration directly on sdk.config
+        sdk.config = {
           version: "1.0.0",
-          config: {
-            button: { color: "purple", variant: "primary" },
-            theme: "dark",
-            logo: "https://caster-card.vercel.app/icon-512.png"
-          }
-        });
+          button: { color: "purple", variant: "primary" },
+          theme: "dark",
+          logo: "https://caster-card.vercel.app/icon-512.png"
+        };
         
+        // Notify client that app is ready
+        await sdk.actions.ready();
         setIsInitialized(true);
       } catch (error) {
         console.error('Farcaster SDK initialization failed:', error);
