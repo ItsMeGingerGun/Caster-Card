@@ -13,14 +13,12 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-900 text-white`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+      <body className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
+        {children}
       </body>
     </html>
   );
