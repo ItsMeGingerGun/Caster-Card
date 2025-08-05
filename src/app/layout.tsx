@@ -16,14 +16,10 @@ export default function Home() {
   }, [user, router]);
 
   const handleLogin = async () => {
-    // Correct Farcaster authentication method using quickAuth
     try {
-      // Get authentication token
-      const { token } = await sdk.quickAuth.getToken();
-      
-      // Here you would typically send the token to your backend
-      // For now, we'll just log it and let the AuthContext handle the rest
-      console.log('Farcaster auth token:', token);
+      // Correct Farcaster authentication method
+      const result = await sdk.quickAuth.getToken();
+      console.log('Farcaster auth token:', result.token);
       
       // The AuthContext should detect the user after this
     } catch (error) {
@@ -65,7 +61,7 @@ export default function Home() {
               <p className="text-gray-300 mb-4">Connect to Farcaster to create your card</p>
               <button 
                 onClick={handleLogin}
-                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium"
+                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium transition-colors duration-300"
               >
                 Sign in with Farcaster
               </button>
@@ -95,7 +91,7 @@ export default function Home() {
             <p>Connect your Farcaster account to get started</p>
             <p className="mt-2">
               By using Caster Card, you agree to our{' '}
-              <Link href="#" className="text-purple-400 hover:underline">
+              <Link href="#" className="text-purple-400 hover:underline transition-colors">
                 Terms of Service
               </Link>
             </p>
@@ -103,7 +99,7 @@ export default function Home() {
         </div>
         
         <footer className="mt-12 text-gray-500 text-sm">
-          <p>Open source project. Contribute on <Link href="#" className="text-indigo-400 hover:underline">GitHub</Link></p>
+          <p>Open source project. Contribute on <Link href="#" className="text-indigo-400 hover:underline transition-colors">GitHub</Link></p>
         </footer>
       </div>
     </main>
