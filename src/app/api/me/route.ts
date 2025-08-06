@@ -1,10 +1,22 @@
 import { getUserStats } from '@/app/lib/neynarClient';
 import { NextResponse } from 'next/server';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export async function GET(req: Request) {
   try {
-    const url = new URL(req.url);
-    const fid = url.searchParams.get('fid');
+    // Verify Farcaster authentication
+    const isAuthenticated = await sdk.quickAuth.verify();
+    
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+    
+    // Get authenticated user's FID
+    const user = await sdk.quickAuth.getUser();
+    const fid = user.fid;
     
     if (!fid) {
       return NextResponse.json(
