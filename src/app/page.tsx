@@ -15,14 +15,8 @@ export default function Home() {
   }, [user, router]);
 
   const handleLogin = async () => {
-    // Open Farcaster authentication flow
-    try {
-      // This will trigger the Farcaster client to handle authentication
-      // The AuthContext will automatically handle the user state after authentication
-      window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth`;
-    } catch (error) {
-      console.error('Farcaster authentication failed:', error);
-    }
+    // Redirect to login endpoint
+    window.location.href = '/api/auth/login';
   };
 
   if (loading) {
