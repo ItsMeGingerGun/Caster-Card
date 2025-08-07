@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from './lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -15,8 +16,17 @@ export default function Home() {
   }, [user, router]);
 
   const handleLogin = async () => {
-    // Redirect to login endpoint
-    window.location.href = '/api/auth/login';
+    // Start Farcaster authentication flow
+    try {
+      const authUrl = await sdk.quickAuth.getAuthUrl({
+        redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`
+      });
+      
+      // Redirect to Farcaster authentication
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Authentication failed:', error);
+    }
   };
 
   if (loading) {
