@@ -33,17 +33,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const authenticate = async () => {
       try {
-        // Use SDK's fetch method for authenticated requests
+        // EXACTLY as in Farcaster sample
         const res = await sdk.quickAuth.fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/me`);
         
         if (res.ok) {
           const userData = await res.json();
           setUser(userData);
-          
-          // Notify the Farcaster client that we're ready
           sdk.actions.ready();
-        } else {
-          console.error('Failed to fetch user data:', res.status);
         }
       } catch (error) {
         console.error('Authentication error:', error);
