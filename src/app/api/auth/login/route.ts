@@ -3,7 +3,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 
 export async function GET() {
   try {
-    // Start Farcaster authentication flow
+    // Start Farcaster authentication flow - CORRECT METHOD
     const authUrl = await sdk.quickAuth.getAuthUrl({
       redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`,
     });
