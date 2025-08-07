@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useAuth } from './lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -14,20 +13,6 @@ export default function Home() {
       router.push('/editor');
     }
   }, [user, router]);
-
-  const handleLogin = async () => {
-    // Start Farcaster authentication flow
-    try {
-      const authUrl = await sdk.quickAuth.getAuthUrl({
-        redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`
-      });
-      
-      // Redirect to Farcaster authentication
-      window.location.href = authUrl;
-    } catch (error) {
-      console.error('Authentication failed:', error);
-    }
-  };
 
   if (loading) {
     return (
@@ -60,10 +45,10 @@ export default function Home() {
           
           <div className="mb-8 flex justify-center">
             <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-6 w-full max-w-xs">
-              <p className="text-gray-300 mb-4">Connect to Farcaster to create your card</p>
+              <p className="text-gray-300 mb-4">Open this app in Warpcast to create your card</p>
               <button 
-                onClick={handleLogin}
-                className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 rounded-lg text-white font-medium transition-colors duration-300"
+                disabled
+                className="w-full py-3 px-4 bg-gray-600 rounded-lg text-white font-medium cursor-not-allowed"
               >
                 Sign in with Farcaster
               </button>
@@ -90,7 +75,7 @@ export default function Home() {
           </div>
           
           <div className="text-sm text-gray-400">
-            <p>Connect your Farcaster account to get started</p>
+            <p>Open this app in Warpcast to get started</p>
             <p className="mt-2">
               By using Caster Card, you agree to our{' '}
               <Link href="#" className="text-purple-400 hover:underline transition-colors">
