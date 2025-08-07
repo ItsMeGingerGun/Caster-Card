@@ -4,7 +4,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 
 export async function GET(req: Request) {
   try {
-    // Verify Farcaster authentication
+    // Verify authentication using SDK
     const isAuthenticated = await sdk.quickAuth.verify();
     
     if (!isAuthenticated) {
