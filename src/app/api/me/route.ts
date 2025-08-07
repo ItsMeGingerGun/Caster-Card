@@ -4,19 +4,8 @@ import { sdk } from '@farcaster/miniapp-sdk';
 
 export async function GET(req: Request) {
   try {
-    // Verify authentication using SDK
-    const isAuthenticated = await sdk.quickAuth.verify();
-    
-    if (!isAuthenticated) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    // Get authenticated user's FID
-    const user = await sdk.quickAuth.getUser();
-    const fid = user.fid;
+    const url = new URL(req.url);
+    const fid = url.searchParams.get('fid');
     
     if (!fid) {
       return NextResponse.json(
