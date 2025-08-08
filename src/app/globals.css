@@ -24,16 +24,12 @@ body {
     );
   background-attachment: fixed;
   background-repeat: no-repeat;
+  background-size: cover;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-/* Ensures gradient covers entire viewport */
-@layer utilities {
-  .min-h-screen {
-    min-height: 100vh;
-  }
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Text clipping for gradient text */
@@ -87,11 +83,6 @@ a, button, .transition-all {
   transition-duration: 300ms;
 }
 
-/* Gradient backgrounds */
-.bg-gradient-to-br {
-  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
-}
-
 /* Fix for gradient text in Safari */
 @supports (-webkit-background-clip: text) {
   .bg-clip-text {
@@ -107,6 +98,7 @@ a, button, .transition-all {
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0; /* Start hidden */
 }
 
 .delay-100 {
@@ -119,4 +111,23 @@ a, button, .transition-all {
 
 .delay-300 {
   animation-delay: 0.3s;
+}
+
+/* Pulse animation for placeholders */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Ensure elements are visible when animations are disabled */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
