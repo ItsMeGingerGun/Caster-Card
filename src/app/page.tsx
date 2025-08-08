@@ -16,16 +16,17 @@ export default function Home() {
     }
   }, [user, router]);
 
-  if (loading || !isMounted) {
+  // Only show loading spinner if not mounted yet
+  if (!isMounted || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-black">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="text-center max-w-2xl w-full">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent animate-fadeIn">
           🃏 Caster Card
@@ -93,6 +94,6 @@ export default function Home() {
           </p>
         </footer>
       </div>
-    </main>
+    </div>
   );
 }
