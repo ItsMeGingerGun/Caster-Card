@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from './lib/AuthContext';
 import { useEffect, useState } from 'react';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -48,10 +49,17 @@ export default function Home() {
           
           <div className="mb-8 flex justify-center">
             <div className="bg-gray-800/50 backdrop-blur-md rounded-xl p-6 w-full max-w-xs">
-              <p className="text-gray-300 mb-4">Open this app in Warpcast to create your card</p>
+              <p className="text-gray-300 mb-4">Sign in to create your card</p>
               <button 
-                disabled
-                className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg text-white font-medium transition-all duration-300 hover:from-purple-700 hover:to-indigo-700 transform hover:scale-[1.02] cursor-not-allowed opacity-75"
+                onClick={async () => {
+                  try {
+                    await sdk.experimental.quickAuth();
+                  } catch (error) {
+                    console.error('Sign in failed:', error);
+                    alert('Failed to sign in. Please try again.');
+                  }
+                }}
+                className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg text-white font-medium transition-all duration-300 hover:from-purple-700 hover:to-indigo-700 transform hover:scale-[1.02]"
               >
                 Sign in with Farcaster
               </button>
@@ -76,9 +84,7 @@ export default function Home() {
           </div>
           
           <div className="text-sm text-gray-400">
-            <p>Open this app in Warpcast to get started</p>
-            <p className="mt-2">
-              By using Caster Card, you agree to our{' '}
+            <p>By using Caster Card, you agree to our{' '}
               <Link href="#" className="text-purple-400 hover:underline hover:text-purple-300">
                 Terms of Service
               </Link>
