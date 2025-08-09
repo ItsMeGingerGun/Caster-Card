@@ -6,21 +6,8 @@ import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
 import { sdk } from '@farcaster/miniapp-sdk';
 
-// Create a custom type for the SDK actions we need
-type CustomSDKActions = {
-  cast?: (options: {
-    text: string;
-    embeds: { url: string }[];
-  }) => Promise<void>;
-  redirect?: (options?: { url?: string }) => Promise<void>;
-  ready?: (options?: any) => Promise<void>;
-};
-
-// Type assertion for sdk.actions with fallback
-const customSDK: CustomSDKActions = sdk.actions as any;
-
 export default function EditorPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, token } = useAuth();
   const [themeConfig, setThemeConfig] = useState({
     backgroundColor: '#1f2937',
     textColor: '#ffffff',
@@ -120,14 +107,10 @@ export default function EditorPage() {
   };
 
   const shareToWarpcast = async () => {
-    if (!user) return;
+    if (!user || !token) return;
 
     setIsSharing(true);
     try {
-      if (!customSDK.cast) {
-        throw new Error('Sharing feature is not available in this context');
-      }
-
       let shareText = `Check out my Farcaster stats! Made with @castercard`;
       
       // Add context if available
@@ -137,7 +120,7 @@ export default function EditorPage() {
         shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
       }
 
-      await customSDK.cast({
+      await sdk.actions.cast({
         text: shareText,
         embeds: [
           {
@@ -181,11 +164,12 @@ export default function EditorPage() {
         <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
         <p className="text-gray-300 mb-8">Sign in to create your card</p>
         <button 
-          onClick={() => {
-            if (customSDK.redirect) {
-              customSDK.redirect();
-            } else {
-              alert('Redirect feature is not available in this context. Please open in Warpcast.');
+          onClick={async () => {
+            try {
+              await sdk.experimental.quickAuth();
+            } catch (error) {
+              console.error('Sign in failed:', error);
+              alert('Failed to sign in. Please try again.');
             }
           }}
           className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
@@ -226,9 +210,6 @@ export default function EditorPage() {
             <div className="mt-6 flex justify-center">
               <ScoreRadial score={user.score} />
             </div>
-          //  <div className="mt-6 text-sm text-gray-400">
-            //  <p>Member since: {new Date(user.registeredAt).toLocaleDateString()}</p>
-           // </div>
           </div>
 
           {/* Center Panel: Card Preview */}
@@ -268,7 +249,7 @@ export default function EditorPage() {
                     : 'bg-green-600 hover:bg-green-700'
                 }`}
               >
-                {isSharing ? 'Sharing...' : 'Share to Farcaster'}
+                {isSharing ? 'Sharing...' : 'Share to Warpcast'}
               </button>
             </div>
           </div>
