@@ -1,7 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { sdk, verifySignInMessage } from '@farcaster/miniapp-sdk';
-
+import { sdk } from '@farcaster/miniapp-sdk'; 
 interface User {
   fid: number;
   username: string;
@@ -13,8 +12,8 @@ interface User {
   casts: number;
   replies: number;
   score: number;
-  registeredAt: string;
 }
+
 
 interface AuthContextType {
   user: User | null;
@@ -34,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const authenticate = async () => {
       try {
         // Verify the incoming message
-        const verifiedData = await verifySignInMessage();
+        const verifiedData = await sdk.verifySignInMessage();
         
         if (verifiedData && verifiedData.fid) {
           // Fetch user data using verified FID
