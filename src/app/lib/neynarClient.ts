@@ -6,10 +6,10 @@ export async function getUserStats(fid: number) {
       apiKey: process.env.NEYNAR_API_KEY!,
     });
     
-    // Fetch user profile using v2 method
+    // Fetch user profile
     const userResponse = await client.fetchBulkUsers({
       fids: [fid],
-      viewerFid: 3 // Optional viewer FID
+      viewerFid: 3
     });
     
     if (!userResponse.users || userResponse.users.length === 0) {
@@ -17,7 +17,7 @@ export async function getUserStats(fid: number) {
     }
     const user = userResponse.users[0];
     
-    // Fetch user's casts using v2 method
+    // Fetch user's casts
     const castsResponse = await client.fetchCastsForUser({
       fid,
       limit: 100,
@@ -47,9 +47,8 @@ export async function getUserStats(fid: number) {
       following: user.following_count,
       casts: casts.length,
       replies,
-      score,
-      // FIX: Use created_at instead of registered_at
-      registeredAt: user.created_at ? new Date(user.created_at) : new Date()
+      score
+      // Removed registeredAt property
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
