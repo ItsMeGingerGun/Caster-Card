@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { sdk, verifySignInMessage } from '@farcaster/miniapp-sdk';
 
 interface User {
   fid: number;
@@ -33,13 +33,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const authenticate = async () => {
       try {
-        // EXACTLY as in Farcaster sample
-        const res = await sdk.quickAuth.fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/me`);
+        // Verify the incoming message
+        const verifiedData = await verifySignInMessage();
         
-        if (res.ok) {
-          const userData = await res.json();
-          setUser(userData);
-          sdk.actions.ready();
+        if (verifiedData && verifiedData.fid) {
+          // Fetch user data using verified FID
+          const res = await fetch(`/api/me?fid=${verifiedData.fid}`);
+          
+          if (res.ok) {
+            const userData = await res.json();
+            setUser(userData);
+            sdk.actions.ready();
+          }
         }
       } catch (error) {
         console.error('Authentication error:', error);
