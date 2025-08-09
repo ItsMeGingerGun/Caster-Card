@@ -226,9 +226,9 @@ export default function EditorPage() {
             <div className="mt-6 flex justify-center">
               <ScoreRadial score={user.score} />
             </div>
-            <div className="mt-6 text-sm text-gray-400">
-              <p>Member since: {new Date(user.registeredAt).toLocaleDateString()}</p>
-            </div>
+          //  <div className="mt-6 text-sm text-gray-400">
+            //  <p>Member since: {new Date(user.registeredAt).toLocaleDateString()}</p>
+           // </div>
           </div>
 
           {/* Center Panel: Card Preview */}
@@ -268,7 +268,7 @@ export default function EditorPage() {
                     : 'bg-green-600 hover:bg-green-700'
                 }`}
               >
-                {isSharing ? 'Sharing...' : 'Share to Warpcast'}
+                {isSharing ? 'Sharing...' : 'Share to Farcaster'}
               </button>
             </div>
           </div>
