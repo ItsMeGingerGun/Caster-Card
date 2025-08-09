@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { sdk } from '@farcaster/miniapp-sdk'; 
+import { sdk } from '@farcaster/miniapp-sdk';
+
 interface User {
   fid: number;
   username: string;
@@ -14,41 +15,48 @@ interface User {
   score: number;
 }
 
-
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  token: null,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const authenticate = async () => {
       try {
-        // Verify the incoming message
-        const verifiedData = await sdk.verifySignInMessage();
+        // Use quickAuth to get token
+        const { token } = await sdk.experimental.quickAuth();
+        setToken(token);
         
-        if (verifiedData && verifiedData.fid) {
-          // Fetch user data using verified FID
-          const res = await fetch(`/api/me?fid=${verifiedData.fid}`);
-          
-          if (res.ok) {
-            const userData = await res.json();
-            setUser(userData);
-            sdk.actions.ready();
-          }
+        // Send token to our API to get user data
+        const res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token }),
+        });
+        
+        if (res.ok) {
+          const userData = await res.json();
+          setUser(userData);
         }
       } catch (error) {
         console.error('Authentication error:', error);
       } finally {
         setLoading(false);
+        sdk.actions.ready();
       }
     };
 
@@ -56,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, token }}>
       {children}
     </AuthContext.Provider>
   );
