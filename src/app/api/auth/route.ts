@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     });
     
     // Get user stats using FID from token
-    const userData = await getUserStats(payload.sub);
+    const userData = await getUserStats(Number(payload.sub)); // Convert to number
     
     return NextResponse.json(userData);
   } catch (error) {
