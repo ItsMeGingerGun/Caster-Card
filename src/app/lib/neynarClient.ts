@@ -6,7 +6,6 @@ export async function getUserStats(fid: number) {
       apiKey: process.env.NEYNAR_API_KEY!,
     });
     
-    // Fetch user profile
     const userResponse = await client.fetchBulkUsers({
       fids: [fid],
       viewerFid: 3
@@ -17,7 +16,6 @@ export async function getUserStats(fid: number) {
     }
     const user = userResponse.users[0];
     
-    // Fetch user's casts
     const castsResponse = await client.fetchCastsForUser({
       fid,
       limit: 100,
@@ -26,7 +24,6 @@ export async function getUserStats(fid: number) {
     const casts = castsResponse.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
-    // Calculate engagement score
     const score = Math.min(
       100, 
       Math.floor(
@@ -48,7 +45,6 @@ export async function getUserStats(fid: number) {
       casts: casts.length,
       replies,
       score
-      // Removed registeredAt property
     };
   } catch (error) {
     console.error('Error fetching user from Neynar:', error);
