@@ -14,13 +14,20 @@ export async function GET(req: Request) {
       );
     }
     
+    // Verify the request first
+    const verifiedData = await sdk.verifySignInMessage(req);
+    
+    if (!verifiedData || !verifiedData.fid || verifiedData.fid !== Number(fid)) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+    
     const userData = await getUserStats(Number(fid));
     
-    // Convert dates to strings
-    return NextResponse.json({
-      ...userData,
-      registeredAt: userData.registeredAt.toISOString()
-    });
+    // Return userData directly without adding registeredAt
+    return NextResponse.json(userData);
   } catch (error) {
     console.error('Error fetching user stats:', error);
     return NextResponse.json(
