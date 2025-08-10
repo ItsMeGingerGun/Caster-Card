@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@farcaster/miniapp-sdk": "^0.1.0",
-    "@neynar/nodejs-sdk": "^2.1.0",
+   "@farcaster/auth-kit": "^1.1.0",
+    "@farcaster/miniapp-sdk": "^0.2.0",
+    "@neynar/nodejs-sdk": "^2.2.0",
     "@vercel/og": "^0.6.1",
     "file-saver": "^2.0.5",
     "next": "14.2.3",
