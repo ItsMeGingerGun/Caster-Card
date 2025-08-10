@@ -120,8 +120,8 @@ export default function EditorPage() {
         shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
       }
 
-      // CORRECTED: Use actions.cast() instead of direct cast()
-      await sdk.actions.cast({
+      // CORRECTED: Use composeCast as per documentation
+      const result = await sdk.actions.composeCast({
         text: shareText,
         embeds: [
           {
@@ -129,7 +129,12 @@ export default function EditorPage() {
           },
         ],
       });
-      alert('Shared to Warpcast successfully!');
+      
+      if (result?.cast) {
+        alert('Shared to Warpcast successfully!');
+      } else {
+        alert('Cast was not shared');
+      }
     } catch (error) {
       console.error('Sharing failed:', error);
       alert(`Failed to share to Warpcast: ${(error as Error).message}`);
