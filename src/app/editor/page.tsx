@@ -124,10 +124,8 @@ export default function EditorPage() {
       const result = await sdk.actions.composeCast({
         text: shareText,
         embeds: [
-          {
-            url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
-          },
-        ],
+          url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
+          ],
       });
       
       if (result?.cast) {
