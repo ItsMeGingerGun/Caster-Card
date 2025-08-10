@@ -8,6 +8,10 @@ const nextConfig = {
       },
     ],
   },
+  // Add output: 'export' for static deployment
+  output: 'export',
+  // Add basePath if deploying to subpath
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -20,3 +24,5 @@ const nextConfig = {
     return config;
   },
 };
+
+module.exports = nextConfig;
