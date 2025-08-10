@@ -1,18 +1,39 @@
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
+import Redis from 'ioredis';
+
+// Create Redis client
+const redis = new Redis(process.env.REDIS_URL!);
 
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
   const { userData, themeConfig } = await req.json();
-
+  
   // Add validation
   if (!userData || !themeConfig) {
     return new Response('Invalid request body', { status: 400 });
   }
   
+  // Create a unique cache key
+  const cacheKey = `card:${userData.fid}:${JSON.stringify(themeConfig)}`;
+  
   try {
-    return new ImageResponse(
+    // Check if the image is cached
+    const cachedImage = await redis.getBuffer(cacheKey);
+    if (cachedImage) {
+      return new Response(cachedImage, {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/png',
+          'X-Cache': 'HIT',
+          'Cache-Control': 'public, max-age=1800, s-maxage=3600'
+        },
+      });
+    }
+
+    // Generate the image
+    const imageResponse = new ImageResponse(
       (
         <div style={{
           display: 'flex',
@@ -92,6 +113,22 @@ export async function POST(req: NextRequest) {
         ]
       }
     );
+    
+    // Convert to buffer
+    const arrayBuffer = await imageResponse.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    
+    // Cache the image for 1 hour
+    await redis.set(cacheKey, buffer, 'EX', 3600);
+    
+    return new Response(buffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/png',
+        'X-Cache': 'MISS',
+        'Cache-Control': 'public, max-age=1800, s-maxage=3600'
+      },
+    });
   } catch (error) {
     console.error('Card generation error:', error);
     return new Response('Failed to generate image', { status: 500 });
