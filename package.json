@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-   "@farcaster/auth-kit": "^1.1.0",
     "@farcaster/miniapp-sdk": "^0.2.0",
     "@neynar/nodejs-sdk": "^2.2.0",
     "@vercel/og": "^0.6.1",
