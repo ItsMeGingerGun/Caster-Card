@@ -120,8 +120,8 @@ export default function EditorPage() {
         shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
       }
 
-      // Use the correct method for casting
-      await sdk.cast({
+      // CORRECTED: Use actions.cast() instead of direct cast()
+      await sdk.actions.cast({
         text: shareText,
         embeds: [
           {
