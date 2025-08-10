@@ -5,6 +5,9 @@ import { getUserStats } from '@/app/lib/neynarClient';
 // Changed runtime to Node.js since Edge doesn't support all needed APIs
 export const runtime = 'nodejs';
 
+// Prevent static generation
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   const fid = req.nextUrl.searchParams.get('fid');
   
