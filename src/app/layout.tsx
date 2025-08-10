@@ -14,6 +14,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Caster Card - Farcaster Stats Profile',
   description: 'Create and share your Farcaster stats with a beautiful digital profile card',
+};
+
+export const viewport = {
   themeColor: '#000000',
 };
 
