@@ -106,41 +106,40 @@ export default function EditorPage() {
     }
   };
 
-  const shareToWarpcast = async () => {
-    if (!user || !token) return;
+ const shareToWarpcast = async () => {
+  if (!user || !token) return;
 
-    setIsSharing(true);
-    try {
-      let shareText = `Check out my Farcaster stats! Made with @castercard`;
-      
-      // Add context if available
-      if (appContext?.type === "cast_embed" && appContext.cast?.author?.username) {
-        shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
-      } else if (appContext?.type === "cast_share" && appContext.cast?.author?.username) {
-        shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
-      }
-
-      // CORRECTED: Use composeCast as per documentation
-      const result = await sdk.actions.composeCast({
-        text: shareText,
-        embeds: [
-          url: `${window.location.origin}/api/card-image?fid=${user.fid}`,
-          ],
-      });
-      
-      if (result?.cast) {
-        alert('Shared to Warpcast successfully!');
-      } else {
-        alert('Cast was not shared');
-      }
-    } catch (error) {
-      console.error('Sharing failed:', error);
-      alert(`Failed to share to Warpcast: ${(error as Error).message}`);
-    } finally {
-      setIsSharing(false);
+  setIsSharing(true);
+  try {
+    let shareText = `Check out my Farcaster stats! Made with @castercard`;
+    
+    // Add context if available
+    if (appContext?.type === "cast_embed" && appContext.cast?.author?.username) {
+      shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
+    } else if (appContext?.type === "cast_share" && appContext.cast?.author?.username) {
+      shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
     }
-  };
 
+    // FIXED: Pass URL as string in embeds array
+    const result = await sdk.actions.composeCast({
+      text: shareText,
+      embeds: [
+        `${window.location.origin}/api/card-image?fid=${user.fid}`
+      ],
+    });
+    
+    if (result?.cast) {
+      alert('Shared to Farcaster successfully!');
+    } else {
+      alert('Cast was not shared');
+    }
+  } catch (error) {
+    console.error('Sharing failed:', error);
+    alert(`Failed to share to Farcaster: ${(error as Error).message}`);
+  } finally {
+    setIsSharing(false);
+  }
+};
   useEffect(() => {
     // Initialize canvas with default background
     if (canvasRef.current) {
