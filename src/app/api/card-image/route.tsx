@@ -2,20 +2,17 @@ import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 import { getUserStats } from '@/app/lib/neynarClient';
 
-// Changed runtime to Node.js since Edge doesn't support all needed APIs
 export const runtime = 'nodejs';
 
-// Prevent static generation
-export const dynamic = 'force-dynamic';
-
 export async function GET(req: NextRequest) {
-  const fid = req.nextUrl.searchParams.get('fid');
-  
-  if (!fid) {
-    return new Response('Missing fid parameter', { status: 400 });
-  }
-
   try {
+    const url = new URL(req.url);
+    const fid = url.searchParams.get('fid');
+    
+    if (!fid) {
+      return new Response('Missing fid parameter', { status: 400 });
+    }
+
     const userData = await getUserStats(Number(fid));
     
     return new ImageResponse(
