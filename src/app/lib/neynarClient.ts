@@ -8,7 +8,7 @@ export async function getUserStats(fid: number) {
     
     const userResponse = await client.fetchBulkUsers({
       fids: [fid],
-      viewerFid: fid // Use the same fid as viewer
+      viewerFid: fid
     });
     
     if (!userResponse.users || userResponse.users.length === 0) {
