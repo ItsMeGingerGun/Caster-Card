@@ -8,22 +8,26 @@ export async function getUserStats(fid: number) {
     
     const userResponse = await client.fetchBulkUsers({
       fids: [fid],
-      viewerFid: 3
+      viewerFid: fid // Use the same fid as viewer
     });
     
     if (!userResponse.users || userResponse.users.length === 0) {
       throw new Error('User not found');
     }
+    
     const user = userResponse.users[0];
     
+    // Get user's casts
     const castsResponse = await client.fetchCastsForUser({
       fid,
       limit: 100,
       includeReplies: true
     });
+    
     const casts = castsResponse.casts;
     const replies = casts.filter(cast => cast.parent_hash).length;
     
+    // Calculate score
     const score = Math.min(
       100, 
       Math.floor(
@@ -37,9 +41,9 @@ export async function getUserStats(fid: number) {
     return {
       fid: user.fid,
       username: user.username,
+      displayName: user.display_name,
       pfpUrl: user.pfp_url,
       bio: user.profile.bio?.text || '',
-      displayName: user.display_name,
       followers: user.follower_count,
       following: user.following_count,
       casts: casts.length,
