@@ -24,28 +24,28 @@ export async function getUserStats(fid: number) {
       includeReplies: true
     });
     
-    const casts = castsResponse.casts;
-    const replies = casts.filter(cast => cast.parent_hash).length;
+    const casts = castsResponse.result.casts;
+    const replies = casts.filter(cast => cast.parentHash).length;
     
     // Calculate score
     const score = Math.min(
       100, 
       Math.floor(
-        user.follower_count * 0.4 +
+        user.followerCount * 0.4 +
         casts.length * 0.3 +
         replies * 0.2 +
-        user.following_count * 0.1
+        user.followingCount * 0.1
       )
     );
 
     return {
       fid: user.fid,
       username: user.username,
-      displayName: user.display_name,
-      pfpUrl: user.pfp_url,
+      displayName: user.displayName,
+      pfpUrl: user.pfp.url,
       bio: user.profile.bio?.text || '',
-      followers: user.follower_count,
-      following: user.following_count,
+      followers: user.followerCount,
+      following: user.followingCount,
       casts: casts.length,
       replies,
       score
