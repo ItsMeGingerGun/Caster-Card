@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { getUserStats } from '@/app/lib/neynarClient';
 
 export const runtime = 'edge';
 
@@ -30,8 +31,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // Fetch user data from your API
-    const userData = await fetch(`https://your-vercel-app.vercel.app/api/user?fid=${fid}`).then(res => res.json());
+    const userData = await getUserStats(parseInt(fid));
 
     return new ImageResponse(
       (
@@ -53,6 +53,7 @@ export async function GET(request: Request) {
             />
             <div>
               <h1 style={{ fontSize: 36, marginBottom: 10 }}>@{userData.username}</h1>
+              <p style={{ fontSize: 24, marginBottom: 20, opacity: 0.8 }}>{userData.displayName}</p>
               <div style={{ display: 'flex', gap: 20, marginTop: 20 }}>
                 <div style={{ textAlign: 'center' }}>
                   <p style={{ fontSize: 24, fontWeight: 'bold' }}>{userData.casts}</p>
