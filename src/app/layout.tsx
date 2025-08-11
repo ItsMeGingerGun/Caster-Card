@@ -7,7 +7,6 @@ import { AuthProvider } from './lib/AuthContext';
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
   weight: ['400', '500', '600', '700'],
 });
 
@@ -27,16 +26,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <head>
-        {/* Preload font to avoid FOUT */}
-        <link
-          rel="preload"
-          href={inter.variable}
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body className={`${inter.className} min-h-screen flex flex-col bg-gradient-to-br from-gray-900 to-black`}>
         <AuthProvider>
           {children}
