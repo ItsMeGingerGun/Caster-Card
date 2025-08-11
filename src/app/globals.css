@@ -73,48 +73,33 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
   }
-  50% {
-    opacity: 0.5;
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
   }
 }
 
-/* Smooth transitions for interactive elements */
-a, button, .transition-all {
-  transition: all 0.3s ease-in-out;
+.animate-blob {
+  animation: blob 7s infinite;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 
-::-webkit-scrollbar-track {
-  background: #1f2937; /* gray-800 */
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #7c3aed; /* purple-600 */
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #6d28d9; /* purple-700 */
-}
-
-/* Hover effects */
-.hover\:scale-105:hover {
-  transform: scale(1.05);
-}
-
-.transition-transform {
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
 
 /* Fix for gradient text in Safari */
 @supports (-webkit-background-clip: text) {
