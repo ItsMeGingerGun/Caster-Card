@@ -120,11 +120,11 @@ export default function EditorPage() {
       shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
     }
 
-    // FIXED: Pass URL as string in embeds array
+    // Use the generate-card API instead of card-image
     const result = await sdk.actions.composeCast({
       text: shareText,
       embeds: [
-        `${window.location.origin}/api/card-image?fid=${user.fid}`
+        `${window.location.origin}/api/generate-card?fid=${user.fid}`
       ],
     });
     
