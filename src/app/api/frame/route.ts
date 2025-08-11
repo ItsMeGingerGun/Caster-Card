@@ -11,18 +11,20 @@ export async function GET(request: Request) {
     if (!fid) {
       return new ImageResponse(
         (
-          <div style={{
-            background: 'linear-gradient(to bottom, #1f2937, #111827)',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'white',
-            padding: 20,
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              background: 'linear-gradient(to bottom, #1f2937, #111827)',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: 'white',
+              padding: '20px',
+              textAlign: 'center'
+            }}
+          >
             <h1 style={{ fontSize: 48, marginBottom: 20 }}>Caster Card</h1>
             <p style={{ fontSize: 24 }}>Create your Farcaster stats card</p>
           </div>
@@ -35,20 +37,22 @@ export async function GET(request: Request) {
 
     return new ImageResponse(
       (
-        <div style={{
-          background: 'linear-gradient(to bottom, #1f2937, #111827)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          padding: 40,
-          color: 'white'
-        }}>
+        <div
+          style={{
+            background: 'linear-gradient(to bottom, #1f2937, #111827)',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            padding: '40px',
+            color: 'white'
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img 
               src={userData.pfpUrl} 
               alt="Profile" 
-              width={120} 
-              height={120} 
+              width="120"
+              height="120"
               style={{ borderRadius: '50%', marginRight: 30 }} 
             />
             <div>
@@ -70,13 +74,15 @@ export async function GET(request: Request) {
               </div>
             </div>
           </div>
-          <div style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            fontSize: 18,
-            color: '#a78bfa'
-          }}>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 20,
+              right: 20,
+              fontSize: 18,
+              color: '#a78bfa'
+            }}
+          >
             castercard.xyz
           </div>
         </div>
