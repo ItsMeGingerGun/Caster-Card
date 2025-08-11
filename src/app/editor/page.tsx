@@ -48,6 +48,7 @@ export default function EditorPage() {
           userData: {
             fid: user.fid,
             username: user.username,
+            displayName: user.displayName,
             pfpUrl: user.pfpUrl,
             bio: user.bio || '',
             casts: user.casts,
@@ -106,40 +107,40 @@ export default function EditorPage() {
     }
   };
 
- const shareToWarpcast = async () => {
-  if (!user || !token) return;
+  const shareToWarpcast = async () => {
+    if (!user || !token) return;
 
-  setIsSharing(true);
-  try {
-    let shareText = `Check out my Farcaster stats! Made with @castercard`;
-    
-    // Add context if available
-    if (appContext?.type === "cast_embed" && appContext.cast?.author?.username) {
-      shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
-    } else if (appContext?.type === "cast_share" && appContext.cast?.author?.username) {
-      shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
-    }
+    setIsSharing(true);
+    try {
+      let shareText = `Check out my Farcaster stats! Made with @castercard`;
+      
+      // Add context if available
+      if (appContext?.type === "cast_embed" && appContext.cast?.author?.username) {
+        shareText = `Replying to @${appContext.cast.author.username}: Check out my Farcaster stats!`;
+      } else if (appContext?.type === "cast_share" && appContext.cast?.author?.username) {
+        shareText = `Sharing my stats with @${appContext.cast.author.username}!`;
+      }
 
-    // Use the generate-card API instead of card-image
-    const result = await sdk.actions.composeCast({
-      text: shareText,
-      embeds: [
-        `${window.location.origin}/api/generate-card?fid=${user.fid}`
-      ],
-    });
-    
-    if (result?.cast) {
-      alert('Shared to Farcaster successfully!');
-    } else {
-      alert('Cast was not shared');
+      const result = await sdk.actions.composeCast({
+        text: shareText,
+        embeds: [
+          `${window.location.origin}/api/frame?fid=${user.fid}`
+        ],
+      });
+      
+      if (result?.cast) {
+        alert('Shared to Farcaster successfully!');
+      } else {
+        alert('Cast was not shared');
+      }
+    } catch (error) {
+      console.error('Sharing failed:', error);
+      alert(`Failed to share to Farcaster: ${(error as Error).message}`);
+    } finally {
+      setIsSharing(false);
     }
-  } catch (error) {
-    console.error('Sharing failed:', error);
-    alert(`Failed to share to Farcaster: ${(error as Error).message}`);
-  } finally {
-    setIsSharing(false);
-  }
-};
+  };
+
   useEffect(() => {
     // Initialize canvas with default background
     if (canvasRef.current) {
@@ -196,7 +197,10 @@ export default function EditorPage() {
               alt={user.username}
               className="w-10 h-10 rounded-full mr-3"
             />
-            <span className="text-gray-300">@{user.username}</span>
+            <div>
+              <span className="text-gray-300 block">{user.displayName}</span>
+              <span className="text-gray-500 text-sm">@{user.username}</span>
+            </div>
           </div>
         </header>
 
