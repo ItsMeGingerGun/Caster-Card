@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchUserData } from '@/lib/neynar'; // Your existing Neynar helper
+import { getUserStats } from '@/app/lib/neynarClient'; // Corrected import path
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const userData = await fetchUserData(parseInt(fid));
+    const userData = await getUserStats(parseInt(fid)); // Use getUserStats function
     return NextResponse.json(userData);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch user data' }, { status: 500 });
