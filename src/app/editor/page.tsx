@@ -185,7 +185,7 @@ export default function EditorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
