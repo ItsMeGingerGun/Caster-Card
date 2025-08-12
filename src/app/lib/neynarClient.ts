@@ -6,6 +6,7 @@ export async function getUserStats(fid: number) {
       apiKey: process.env.NEYNAR_API_KEY!,
     });
     
+    // V2: Use object parameter instead of multiple arguments
     const userResponse = await client.fetchBulkUsers({
       fids: [fid],
       viewerFid: fid
@@ -17,35 +18,36 @@ export async function getUserStats(fid: number) {
     
     const user = userResponse.users[0];
     
-    // Get user's casts
+    // V2: Use object parameter with named properties
     const castsResponse = await client.fetchCastsForUser({
       fid,
       limit: 100,
       includeReplies: true
     });
     
-    const casts = castsResponse.result.casts;
-    const replies = casts.filter(cast => cast.parentHash).length;
+    // V2: Access casts directly from response
+    const casts = castsResponse.casts;
+    const replies = casts.filter(cast => cast.parent_hash).length;
     
     // Calculate score
     const score = Math.min(
       100, 
       Math.floor(
-        user.followerCount * 0.4 +
+        user.follower_count * 0.4 +
         casts.length * 0.3 +
         replies * 0.2 +
-        user.followingCount * 0.1
+        user.following_count * 0.1
       )
     );
 
     return {
       fid: user.fid,
       username: user.username,
-      displayName: user.displayName,
-      pfpUrl: user.pfp.url,
+      displayName: user.display_name,
+      pfpUrl: user.pfp_url,
       bio: user.profile.bio?.text || '',
-      followers: user.followerCount,
-      following: user.followingCount,
+      followers: user.follower_count,
+      following: user.following_count,
       casts: casts.length,
       replies,
       score
