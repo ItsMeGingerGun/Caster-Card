@@ -156,7 +156,7 @@ export default function EditorPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
@@ -164,8 +164,8 @@ export default function EditorPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold mb-6">Caster Card Editor</h1>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-black">
+        <h1 className="text-3xl font-bold mb-6 text-white">Caster Card Editor</h1>
         <p className="text-gray-300 mb-8">Sign in to create your card</p>
         <button 
           onClick={async () => {
@@ -176,7 +176,7 @@ export default function EditorPage() {
               alert('Failed to sign in. Please try again.');
             }
           }}
-          className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
+          className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium text-white"
         >
           Sign in with Farcaster
         </button>
@@ -207,7 +207,7 @@ export default function EditorPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Panel: Stats Selection */}
           <div className="bg-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-4">Your Stats</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Your Stats</h2>
             <div className="grid grid-cols-2 gap-4">
               <StatBadge icon="✍️" value={user.casts} label="Casts" />
               <StatBadge icon="💬" value={user.replies} label="Replies" />
@@ -221,7 +221,7 @@ export default function EditorPage() {
 
           {/* Center Panel: Card Preview */}
           <div className="bg-gray-800 rounded-xl p-6 flex flex-col items-center">
-            <h2 className="text-xl font-semibold mb-4">Card Preview</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Card Preview</h2>
             <div className="w-full max-w-md border-2 border-gray-700 rounded-lg overflow-hidden">
               <canvas 
                 ref={canvasRef} 
@@ -236,14 +236,14 @@ export default function EditorPage() {
                 className={`px-5 py-2 rounded-lg font-medium ${
                   isGenerating 
                     ? 'bg-gray-700 cursor-not-allowed' 
-                    : 'bg-indigo-600 hover:bg-indigo-700'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                 }`}
               >
                 {isGenerating ? 'Generating...' : 'Update Preview'}
               </button>
               <button 
                 onClick={downloadCard}
-                className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium"
+                className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium text-white"
               >
                 Download
               </button>
@@ -253,7 +253,7 @@ export default function EditorPage() {
                 className={`px-5 py-2 rounded-lg font-medium ${
                   isSharing 
                     ? 'bg-gray-700 cursor-not-allowed' 
-                    : 'bg-green-600 hover:bg-green-700'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
                 }`}
               >
                 {isSharing ? 'Sharing...' : 'Share to Warpcast'}
@@ -263,7 +263,7 @@ export default function EditorPage() {
 
           {/* Right Panel: Theme Customizer */}
           <div className="bg-gray-800 rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-4">Customize Theme</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Customize Theme</h2>
             <div className="space-y-6">
               <div>
                 <label className="block mb-2 text-gray-300">Background Color</label>
