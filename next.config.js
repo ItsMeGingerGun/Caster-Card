@@ -11,10 +11,34 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@vercel/og'],
   },
-  // Add output: 'export' for static deployment
-  output: 'export',
-  // Add basePath if deploying to subpath
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  // Remove output: 'export' - causes issues with API routes
+  // output: 'export', 
+  
+  // Remove basePath unless you specifically need it
+  // basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  
+  // Add rewrites for Farcaster manifest and assets
+  async rewrites() {
+    return [
+      {
+        source: '/.well-known/farcaster.json',
+        destination: '/api/.well-known/farcaster.json',
+      },
+      {
+        source: '/icon-192.png',
+        destination: '/public/icon-192.png',
+      },
+      {
+        source: '/icon-512.png',
+        destination: '/public/icon-512.png',
+      },
+      {
+        source: '/screenshot1.png',
+        destination: '/public/screenshot1.png',
+      }
+    ]
+  },
+  
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
