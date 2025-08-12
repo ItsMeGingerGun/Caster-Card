@@ -1,7 +1,7 @@
 {
   "name": "Caster Card",
   "icon": "icon-512.png",
-  "start_url": "/",
+  "start_url": "/api/frame",
   "description": "Create and share your Farcaster stats with a beautiful digital profile card",
   "app": {
     "bundle": "web",
