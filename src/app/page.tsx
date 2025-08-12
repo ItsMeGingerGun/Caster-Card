@@ -21,7 +21,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
+    <div className="min-h-screen flex flex-col overflow-hidden">
       {/* Hero Section */}
       <div className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 overflow-hidden">
