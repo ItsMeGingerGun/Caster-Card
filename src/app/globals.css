@@ -14,9 +14,17 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background: linear-gradient(to bottom right, #0f172a, #000000);
 }
 
-/* REMOVE the body background property */
+body {
+  color: rgb(var(--foreground-rgb));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Text clipping for gradient text */
 .bg-clip-text {
   -webkit-background-clip: text;
@@ -38,27 +46,6 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out forwards;
-}
-
-.delay-100 {
-  animation-delay: 0.1s;
-}
-
-.delay-200 {
-  animation-delay: 0.2s;
-}
-
-.delay-300 {
-  animation-delay: 0.3s;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes blob {
@@ -92,18 +79,5 @@ body {
 @supports (-webkit-background-clip: text) {
   .bg-clip-text {
     -webkit-text-fill-color: transparent;
-  }
-}
-
-/* Ensure elements are visible when animations are disabled */
-@media (prefers-reduced-motion: reduce) {
-  .animate-fadeIn {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .animate-spin,
-  .animate-pulse {
-    animation: none;
   }
 }
