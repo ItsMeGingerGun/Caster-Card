@@ -1,6 +1,5 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
-import { getUserStats } from '@/app/lib/neynarClient';
 
 export const runtime = 'edge';
 
@@ -34,7 +33,43 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const userData = await getUserStats(parseInt(fid));
+    // Fetch user data from our Node.js API route
+    const userDataRes = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL}/api/user?fid=${fid}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    if (!userDataRes.ok) {
+      console.error('Failed to fetch user data', await userDataRes.text());
+      return new ImageResponse(
+        (
+          <div
+            style={{
+              background: 'linear-gradient(to bottom, #1f2937, #111827)',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: 'white',
+              padding: '20px',
+              textAlign: 'center'
+            }}
+          >
+            <h1 style={{ fontSize: 48, marginBottom: 20 }}>Error</h1>
+            <p style={{ fontSize: 24 }}>Failed to load user data</p>
+          </div>
+        ),
+        { width: 800, height: 400 }
+      );
+    }
+
+    const userData = await userDataRes.json();
 
     return new ImageResponse(
       (
@@ -55,7 +90,11 @@ export async function GET(request: NextRequest) {
               alt="Profile"
               width={120}
               height={120}
-              style={{ borderRadius: '50%', marginRight: 30 }}
+              style={{ 
+                borderRadius: '50%', 
+                marginRight: 30,
+                border: '2px solid #a78bfa'
+              }}
             />
             <div>
               <h1 style={{ fontSize: 36, marginBottom: 10 }}>@{userData.username}</h1>
@@ -82,9 +121,16 @@ export async function GET(request: NextRequest) {
               bottom: 20,
               right: 20,
               fontSize: 18,
-              color: '#a78bfa'
+              color: '#a78bfa',
+              display: 'flex',
+              alignItems: 'center'
             }}
           >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ marginRight: 8 }}>
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#a78bfa" strokeWidth="2"/>
+              <path d="M2 17L12 22L22 17" stroke="#a78bfa" strokeWidth="2"/>
+              <path d="M2 12L12 17L22 12" stroke="#a78bfa" strokeWidth="2"/>
+            </svg>
             castercard.xyz
           </div>
         </div>
@@ -109,12 +155,40 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (e) {
-    console.error(e);
-    return new Response('Failed to generate image', { status: 500 });
+    console.error('Frame generation error:', e);
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            background: 'linear-gradient(to bottom, #1f2937, #111827)',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'white',
+            padding: '20px',
+            textAlign: 'center'
+          }}
+        >
+          <h1 style={{ fontSize: 48, marginBottom: 20 }}>Error</h1>
+          <p style={{ fontSize: 24 }}>Failed to generate card</p>
+        </div>
+      ),
+      { width: 800, height: 400 }
+    );
   }
 }
 
 async function fetchFont(url: string) {
-  const res = await fetch(url);
-  return await res.arrayBuffer();
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Font fetch failed: ${res.status}`);
+    return await res.arrayBuffer();
+  } catch (error) {
+    console.error('Error loading font:', error);
+    // Return empty buffer as fallback
+    return new ArrayBuffer(0);
+  }
 }
