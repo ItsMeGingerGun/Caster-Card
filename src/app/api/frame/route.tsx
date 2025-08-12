@@ -1,6 +1,8 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
+// Prevent static generation and ensure Edge runtime
+export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
@@ -138,6 +140,9 @@ export async function GET(request: NextRequest) {
       {
         width: 800,
         height: 400,
+        headers: {
+          'Cache-Control': 'public, max-age=60, stale-while-revalidate=30'
+        },
         fonts: [
           {
             name: 'Inter',
