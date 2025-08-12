@@ -2,6 +2,8 @@ import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 import { getUserStats } from '@/app/lib/neynarClient';
 
+// Prevent static generation and ensure Node.js runtime
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
