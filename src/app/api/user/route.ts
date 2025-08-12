@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getUserStats } from '@/app/lib/neynarClient'; // Corrected import path
 
+export const runtime = 'nodejs'; 
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const fid = searchParams.get('fid');
