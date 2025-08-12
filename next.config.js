@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@vercel/og'],
+  },
   // Add output: 'export' for static deployment
   output: 'export',
   // Add basePath if deploying to subpath
