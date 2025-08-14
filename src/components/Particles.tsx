@@ -11,8 +11,9 @@ const Particles = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Use fixed size instead of window dimensions
+    canvas.width = 1920;
+    canvas.height = 1080;
     
     const particles: any[] = [];
     const particleCount = 100;
@@ -25,7 +26,7 @@ const Particles = () => {
         radius: Math.random() * 2 + 1,
         speedX: Math.random() * 1 - 0.5,
         speedY: Math.random() * 1 - 0.5,
-        color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+        color: `hsla(${Math.random() * 360}, 70%, 60%, 0.2)`, // More transparency
       });
     }
     
@@ -55,21 +56,12 @@ const Particles = () => {
     };
     
     animate();
-    
-    // Handle resize
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute inset-0 w-full h-full opacity-20"
+      className="particles-canvas"
     />
   );
 };
