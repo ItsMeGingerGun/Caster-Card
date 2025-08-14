@@ -11,13 +11,6 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@vercel/og'],
   },
-  // Remove output: 'export' - causes issues with API routes
-  // output: 'export', 
-  
-  // Remove basePath unless you specifically need it
-  // basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  
-  // Add rewrites for Farcaster manifest and assets
   async rewrites() {
     return [
       {
@@ -38,7 +31,6 @@ const nextConfig = {
       }
     ]
   },
-  
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
