@@ -13,7 +13,7 @@ export default function Home() {
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
+      <div className="loading-overlay">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
       </div>
     );
@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
       {/* Hero Section */}
-      <div className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
+      <div className="relative-container py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
         <Particles />
         <div className="relative max-w-7xl mx-auto text-center z-10">
           <motion.h1 
