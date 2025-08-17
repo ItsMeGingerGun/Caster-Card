@@ -40,15 +40,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
-      {/* Hero Section */}
+      {/* Hero Section - Fixed */}
       <div className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
         <Particles />
-        <div className="relative max-w-7xl mx-auto text-center z-10">
+        <div className="relative max-w-7xl mx-auto text-center z-20"> {/* Increased z-index */}
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-white"
+            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6"
           >
             <span className="block bg-gradient-to-r from-yellow-300 to-pink-400 bg-clip-text text-transparent">
               Showcase Your
