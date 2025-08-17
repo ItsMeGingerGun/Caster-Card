@@ -11,9 +11,28 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
+  const handleScrollToFeatures = () => {
+    const featuresElement = document.getElementById('features');
+    if (featuresElement) {
+      window.scrollTo({ 
+        top: featuresElement.offsetTop, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  const handleQuickAuth = async () => {
+    try {
+      await sdk.experimental.quickAuth();
+    } catch (error) {
+      console.error('Sign in failed:', error);
+      alert('Failed to sign in. Please try again.');
+    }
+  };
+
   if (!isMounted) {
     return (
-      <div className="loading-overlay">
+      <div className="loading-overlay min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
       </div>
     );
@@ -22,7 +41,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
       {/* Hero Section */}
-      <div className="relative-container py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
+      <div className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 via-indigo-800 to-pink-700">
         <Particles />
         <div className="relative max-w-7xl mx-auto text-center z-10">
           <motion.h1 
@@ -55,20 +74,13 @@ export default function Home() {
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
             <button
-              onClick={async () => {
-                try {
-                  await sdk.experimental.quickAuth();
-                } catch (error) {
-                  console.error('Sign in failed:', error);
-                  alert('Failed to sign in. Please try again.');
-                }
-              }}
+              onClick={handleQuickAuth}
               className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-lg text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 hover:from-yellow-500 hover:to-pink-600"
             >
               Create Your Card
             </button>
             <button 
-              onClick={() => window.scrollTo({ top: document.getElementById('features')!.offsetTop, behavior: 'smooth' })}
+              onClick={handleScrollToFeatures}
               className="px-8 py-4 bg-white/10 backdrop-blur-sm rounded-lg text-white font-bold text-lg shadow-lg hover:bg-white/20 transition-all border border-white/20"
             >
               Learn More
@@ -102,7 +114,7 @@ export default function Home() {
                       <div className="text-center md:text-left">
                         <h3 className="text-2xl font-bold mb-1 bg-gradient-to-r from-cyan-300 to-purple-400 bg-clip-text text-transparent">@farcaster_user</h3>
                         <p className="text-cyan-200 mb-4">Building the future of social media</p>
-                        <div className="flex flex-wrap justify-center gap-6">
+                        <div className="flex flex-wrap justify-center md:justify-start gap-6">
                           <div className="text-center bg-gradient-to-br from-cyan-800/40 to-purple-800/40 rounded-xl p-3 min-w-[100px]">
                             <p className="text-2xl font-bold text-white">1.2K</p>
                             <p className="text-cyan-200 text-sm">Casts</p>
@@ -239,14 +251,7 @@ export default function Home() {
             Join thousands of Farcaster users showcasing their stats with beautiful cards
           </p>
           <button
-            onClick={async () => {
-              try {
-                await sdk.experimental.quickAuth();
-              } catch (error) {
-                console.error('Sign in failed:', error);
-                alert('Failed to sign in. Please try again.');
-              }
-            }}
+            onClick={handleQuickAuth}
             className="px-10 py-5 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-xl text-white font-bold text-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
           >
             Get Started Now
