@@ -29,7 +29,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6"
+            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-white"
           >
             <span className="block bg-gradient-to-r from-yellow-300 to-pink-400 bg-clip-text text-transparent">
               Showcase Your
