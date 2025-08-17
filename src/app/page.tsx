@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { motion } from 'framer-motion';
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -37,15 +36,14 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-white">
       {/* Navigation */}
-      <nav className="py-4 px-6 border-b border-gray-800">
+      <nav className="py-4 px-4 border-b border-gray-800">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-2xl">🃏</span>
+          <div className="flex items-center">
             <span className="text-xl font-bold text-purple-400">Caster Card</span>
           </div>
           <button 
             onClick={handleQuickAuth}
-            className="px-4 py-2 bg-purple-600 rounded-md font-medium hover:bg-purple-700 transition-colors"
+            className="px-4 py-2 bg-purple-600 rounded font-medium"
           >
             Sign In
           </button>
@@ -53,94 +51,70 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-bold mb-6"
-          >
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-              Showcase Your
-            </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mt-2">
-              Farcaster Stats
-            </span>
-          </motion.h1>
+      <section className="py-12 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-3xl md:text-4xl font-bold mb-6">
+            <div className="text-purple-400">Showcase Your</div>
+            <div className="text-blue-400 mt-2">Farcaster Stats</div>
+          </h1>
           
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-gray-300 max-w-2xl mx-auto mb-10"
-          >
-            Create beautiful profile cards to share your Farcaster achievements
-          </motion.p>
+          <p className="text-lg text-gray-300 mb-8">
+            Create profile cards to share your Farcaster achievements
+          </p>
           
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={handleQuickAuth}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-md font-bold shadow-lg hover:shadow-xl transition-shadow"
+              className="px-6 py-3 bg-purple-600 rounded font-bold"
             >
               Create Your Card
             </button>
             <button 
               onClick={handleScrollToFeatures}
-              className="px-6 py-3 bg-gray-800 rounded-md font-bold hover:bg-gray-700 transition-colors"
+              className="px-6 py-3 bg-gray-800 rounded font-bold"
             >
               Learn More
             </button>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Preview Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Your Stats in Style</h2>
-            <p className="text-xl text-gray-300">
-              Beautiful cards that showcase your Farcaster achievements
+      <section className="py-12 px-4 bg-gray-800">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-2">Your Stats in Style</h2>
+            <p className="text-gray-300">
+              Showcase your Farcaster achievements
             </p>
           </div>
           
-          <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl p-1 shadow-xl">
-            <div className="bg-gray-900 rounded-xl p-8">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="bg-gradient-to-br from-purple-500 to-blue-500 p-1 rounded-full">
-                  <div className="bg-gray-800 rounded-full p-1">
-                    <div className="bg-gray-200 border-2 border-dashed rounded-full w-32 h-32" />
-                  </div>
-                </div>
+          <div className="bg-gray-700 rounded-lg p-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="bg-gray-200 rounded-full w-24 h-24" />
+              
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-purple-300 mb-2">
+                  @farcaster_user
+                </h3>
+                <p className="text-blue-300 mb-4">Building social media</p>
                 
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-400">
-                    @farcaster_user
-                  </h3>
-                  <p className="text-blue-300 mb-6">Building the future of social media</p>
-                  
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="bg-gray-800 rounded-lg p-4 text-center">
-                      <p className="text-xl font-bold">1.2K</p>
-                      <p className="text-purple-300 text-sm">Casts</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-4 text-center">
-                      <p className="text-xl font-bold">4.5K</p>
-                      <p className="text-purple-300 text-sm">Followers</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-4 text-center">
-                      <p className="text-xl font-bold">98</p>
-                      <p className="text-purple-300 text-sm">Following</p>
-                    </div>
-                    <div className="bg-gray-800 rounded-lg p-4 text-center">
-                      <p className="text-xl font-bold">87</p>
-                      <p className="text-purple-300 text-sm">Score</p>
-                    </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-600 rounded p-3 text-center">
+                    <p className="font-bold">1.2K</p>
+                    <p className="text-sm text-purple-300">Casts</p>
+                  </div>
+                  <div className="bg-gray-600 rounded p-3 text-center">
+                    <p className="font-bold">4.5K</p>
+                    <p className="text-sm text-purple-300">Followers</p>
+                  </div>
+                  <div className="bg-gray-600 rounded p-3 text-center">
+                    <p className="font-bold">98</p>
+                    <p className="text-sm text-purple-300">Following</p>
+                  </div>
+                  <div className="bg-gray-600 rounded p-3 text-center">
+                    <p className="font-bold">87</p>
+                    <p className="text-sm text-purple-300">Score</p>
                   </div>
                 </div>
               </div>
@@ -150,164 +124,125 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Why Choose Caster Card?</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Create stunning profile cards with ease
+      <section id="features" className="py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-2">Why Choose Caster Card?</h2>
+            <p className="text-gray-300">
+              Create profile cards with ease
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
               { 
                 title: "Beautiful Designs", 
-                description: "Pre-built templates with modern styling",
-                icon: "🎨"
+                description: "Pre-built templates with styling",
               },
               { 
                 title: "Rich Statistics", 
-                description: "Showcase your Farcaster engagement metrics",
-                icon: "📊"
+                description: "Showcase your Farcaster metrics",
               },
               { 
                 title: "Easy Sharing", 
-                description: "Share directly to Warpcast or download",
-                icon: "📤"
+                description: "Share to Warpcast or download",
               },
               { 
                 title: "Custom Themes", 
-                description: "Personalize colors to match your style",
-                icon: "🎨"
+                description: "Personalize your card",
               },
-              { 
-                title: "Always Free", 
-                description: "No hidden fees or premium tiers",
-                icon: "🎁"
-              },
-              { 
-                title: "Open Source", 
-                description: "Transparent code you can contribute to",
-                icon: "🔓"
-              }
             ].map((feature, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="bg-gray-800 rounded-xl p-8 border border-gray-700"
+                className="bg-gray-800 rounded-lg p-6 border border-gray-700"
               >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
                 <p className="text-gray-300">{feature.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How It Works</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Create your Farcaster card in just 3 simple steps
+      <section className="py-12 px-4 bg-gray-800">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-2">How It Works</h2>
+            <p className="text-gray-300">
+              Create your card in 3 simple steps
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { 
                 step: "1", 
                 title: "Connect", 
-                description: "Sign in with your Farcaster account",
-                color: "from-purple-600 to-blue-600"
+                description: "Sign in with Farcaster",
               },
               { 
                 step: "2", 
                 title: "Customize", 
-                description: "Choose your theme and stats",
-                color: "from-purple-600 to-blue-600"
+                description: "Choose your theme",
               },
               { 
                 step: "3", 
                 title: "Share", 
-                description: "Post to Warpcast or download",
-                color: "from-purple-600 to-blue-600"
+                description: "Post or download",
               }
             ].map((step, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="bg-gray-900 rounded-xl p-8 text-center border border-gray-700"
+                className="bg-gray-700 rounded-lg p-6 text-center"
               >
-                <div className={`w-16 h-16 ${idx === 0 ? 'bg-gradient-to-r from-purple-600 to-blue-600' : idx === 1 ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-cyan-600 to-purple-600'} rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold`}>
+                <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
                   {step.step}
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
+                <h3 className="text-lg font-bold mb-2">{step.title}</h3>
                 <p className="text-gray-300">{step.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl p-8 border border-gray-700">
-            <h2 className="text-3xl font-bold mb-6">Ready to Create Your Card?</h2>
-            <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-              Join thousands of Farcaster users showcasing their stats
-            </p>
-            <button
-              onClick={handleQuickAuth}
-              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-md font-bold text-lg shadow-lg hover:shadow-xl transition-shadow"
-            >
-              Get Started Now
-            </button>
-          </div>
+      <section className="py-12 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">Ready to Create Your Card?</h2>
+          <p className="text-gray-300 mb-6">
+            Join Farcaster users showcasing their stats
+          </p>
+          <button
+            onClick={handleQuickAuth}
+            className="px-8 py-3 bg-purple-600 rounded font-bold"
+          >
+            Get Started
+          </button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-800 bg-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">🃏</span>
-                <span className="text-xl font-bold text-purple-400">Caster Card</span>
-              </div>
-              <p className="text-gray-500 mt-2">Showcase your Farcaster stats in style</p>
-            </div>
-            
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-500 hover:text-white transition-colors">
-                Terms
-              </a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors">
-                Privacy
-              </a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors">
-                GitHub
-              </a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors">
-                Contact
-              </a>
-            </div>
+      <footer className="py-8 px-4 border-t border-gray-800 bg-gray-900">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-4">
+            <span className="font-bold text-purple-400">Caster Card</span>
           </div>
-          
-          <div className="mt-10 text-center text-gray-500 text-sm">
-            <p>© {new Date().getFullYear()} Caster Card. Not affiliated with Farcaster or Warpcast.</p>
+          <div className="flex justify-center space-x-6 mb-4">
+            <a href="#" className="text-gray-500 hover:text-white">
+              Terms
+            </a>
+            <a href="#" className="text-gray-500 hover:text-white">
+              Privacy
+            </a>
+            <a href="#" className="text-gray-500 hover:text-white">
+              GitHub
+            </a>
           </div>
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Caster Card. Not affiliated with Farcaster or Warpcast.
+          </p>
         </div>
       </footer>
     </div>
