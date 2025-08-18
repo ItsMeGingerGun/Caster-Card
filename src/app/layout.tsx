@@ -13,6 +13,23 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Caster Card - Farcaster Stats Profile',
   description: 'Create and share your Farcaster stats with a beautiful digital profile card',
+  openGraph: {
+    title: 'Caster Card',
+    description: 'Showcase your Farcaster stats with beautiful profile cards',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Caster Card',
+    description: 'Showcase your Farcaster stats with beautiful profile cards',
+    images: ['/og-image.png'],
+  },
 };
 
 export const viewport = {
