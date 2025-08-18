@@ -16,20 +16,24 @@ export default function EditorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [appContext, setAppContext] = useState<any>(null);
+  const [sdkError, setSdkError] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const initialize = async () => {
       try {
-        
-        await sdk.actions.ready();
-        
-        const context = await sdk.context;
-        if (context?.location) {
-          setAppContext(context.location);
+        // Check if we're in a Farcaster environment
+        if (typeof window !== 'undefined' && window.location !== window.parent.location) {
+          await sdk.actions.ready();
+          
+          const context = await sdk.context;
+          if (context?.location) {
+            setAppContext(context.location);
+          }
         }
       } catch (error) {
-        console.error('Failed to fetch Farcaster context:', error);
+        console.error('Failed to initialize SDK:', error);
+        setSdkError(true);
       }
     };
     
@@ -235,30 +239,38 @@ export default function EditorPage() {
               <button 
                 onClick={generateCard}
                 disabled={isGenerating}
-                className={`px-5 py-2 rounded-lg font-medium ${
+                className={`px-5 py-2 rounded-lg font-medium flex items-center justify-center ${
                   isGenerating 
                     ? 'bg-gray-700 cursor-not-allowed' 
                     : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                 }`}
               >
-                {isGenerating ? 'Generating...' : 'Update Preview'}
+                {isGenerating ? (
+                  <>
+                    <span className="animate-spin mr-2">🔄</span> Generating...
+                  </>
+                ) : 'Update Preview'}
               </button>
               <button 
                 onClick={downloadCard}
-                className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium text-white"
+                className="px-5 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-medium text-white flex items-center"
               >
                 Download
               </button>
               <button 
                 onClick={shareToWarpcast}
                 disabled={isSharing}
-                className={`px-5 py-2 rounded-lg font-medium ${
+                className={`px-5 py-2 rounded-lg font-medium flex items-center justify-center ${
                   isSharing 
                     ? 'bg-gray-700 cursor-not-allowed' 
                     : 'bg-green-600 hover:bg-green-700 text-white'
                 }`}
               >
-                {isSharing ? 'Sharing...' : 'Share to Warpcast'}
+                {isSharing ? (
+                  <>
+                    <span className="animate-spin mr-2">🔄</span> Sharing...
+                  </>
+                ) : 'Share to Warpcast'}
               </button>
             </div>
           </div>
