@@ -10,6 +10,7 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
@@ -24,10 +25,17 @@ body {
     rgb(var(--background-end-rgb))
   );
   background-attachment: fixed;
+  min-height: 100vh;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-/* Fix stacking context */
-isolation: isolate;
+#__next {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Text clipping for gradient text */
 .bg-clip-text {
@@ -139,4 +147,14 @@ isolation: isolate;
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6d28d9;
+}
+
+/* Spinner animation */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
