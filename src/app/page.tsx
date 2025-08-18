@@ -1,13 +1,45 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { sdk, setup } from '@farcaster/miniapp-sdk';
 import { motion } from 'framer-motion';
+import Particles from '../components/Particles';
+
+const testimonials = [
+  {
+    name: "Alice",
+    handle: "alice",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    quote: "My engagement doubled after adding my Caster Card to my profile!"
+  },
+  {
+    name: "Bob",
+    handle: "bob",
+    avatar: "https://i.pravatar.cc/150?img=2",
+    quote: "Finally a way to showcase my Farcaster journey in a beautiful format."
+  },
+  {
+    name: "Charlie",
+    handle: "charlie",
+    avatar: "https://i.pravatar.cc/150?img=3",
+    quote: "The customization options let me create a card that truly represents me."
+  }
+];
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    const initialize = async () => {
+      try {
+        await setup();
+        await sdk.actions.ready();
+        setIsMounted(true);
+      } catch (error) {
+        console.error('SDK initialization failed:', error);
+      }
+    };
+
+    initialize();
   }, []);
 
   const handleScrollToFeatures = () => {
@@ -35,9 +67,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-900 text-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+      <Particles />
+      
       {/* Navigation */}
-      <nav className="py-4 px-6 border-b border-gray-800">
+      <nav className="py-4 px-6 border-b border-gray-800 backdrop-blur-sm bg-black/30 relative z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-2xl">🃏</span>
@@ -53,18 +87,15 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto text-center">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-bold mb-6"
           >
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-              Showcase Your
-            </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mt-2">
-              Farcaster Stats
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 bg-size-200 animate-gradient">
+              Showcase Your Farcaster Stats
             </span>
           </motion.h1>
           
@@ -75,6 +106,7 @@ export default function Home() {
             className="text-xl text-gray-300 max-w-2xl mx-auto mb-10"
           >
             Create beautiful profile cards to share your Farcaster achievements
+            <br />across the decentralized social graph
           </motion.p>
           
           <motion.div
@@ -100,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* Preview Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800/50 backdrop-blur relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Your Stats in Style</h2>
@@ -150,7 +182,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="py-16 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Why Choose Caster Card?</h2>
@@ -198,7 +230,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="bg-gray-800 rounded-xl p-8 border border-gray-700"
+                className="bg-gray-800/50 backdrop-blur rounded-xl p-8 border border-gray-700"
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
@@ -209,8 +241,45 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800/50 backdrop-blur relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Loved by Farcaster Community</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Join thousands of users showcasing their stats
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-gray-900/70 backdrop-blur rounded-xl p-6 border border-purple-900/50"
+              >
+                <div className="flex items-center mb-4">
+                  <img 
+                    src={testimonial.avatar} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-bold">{testimonial.name}</h4>
+                    <p className="text-purple-400 text-sm">@{testimonial.handle}</p>
+                  </div>
+                </div>
+                <p className="text-gray-300 italic">"{testimonial.quote}"</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How It Works */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900/50 backdrop-blur relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>
@@ -231,13 +300,13 @@ export default function Home() {
                 step: "2", 
                 title: "Customize", 
                 description: "Choose your theme and stats",
-                color: "from-purple-600 to-blue-600"
+                color: "from-blue-600 to-cyan-600"
               },
               { 
                 step: "3", 
                 title: "Share", 
                 description: "Post to Warpcast or download",
-                color: "from-purple-600 to-blue-600"
+                color: "from-cyan-600 to-purple-600"
               }
             ].map((step, idx) => (
               <motion.div
@@ -246,9 +315,9 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="bg-gray-900 rounded-xl p-8 text-center border border-gray-700"
+                className="bg-gray-900/70 backdrop-blur rounded-xl p-8 text-center border border-gray-700"
               >
-                <div className={`w-16 h-16 ${idx === 0 ? 'bg-gradient-to-r from-purple-600 to-blue-600' : idx === 1 ? 'bg-gradient-to-r from-blue-600 to-cyan-600' : 'bg-gradient-to-r from-cyan-600 to-purple-600'} rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold`}>
+                <div className={`w-16 h-16 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold`}>
                   {step.step}
                 </div>
                 <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
@@ -260,7 +329,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-xl p-8 border border-gray-700">
             <h2 className="text-3xl font-bold mb-6">Ready to Create Your Card?</h2>
@@ -278,7 +347,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-800 bg-gray-900">
+      <footer className="py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-800 bg-gray-900 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
