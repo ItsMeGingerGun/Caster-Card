@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { sdk, setup } from '@farcaster/miniapp-sdk';
+import { sdk } from '@farcaster/miniapp-sdk';
 import { motion } from 'framer-motion';
 import Particles from '../components/Particles';
 
@@ -31,7 +31,7 @@ export default function Home() {
   useEffect(() => {
     const initialize = async () => {
       try {
-        await setup();
+       
         await sdk.actions.ready();
         setIsMounted(true);
       } catch (error) {
