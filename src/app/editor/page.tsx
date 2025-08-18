@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext';
 import StatBadge from '../components/StatBadge';
 import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
-import { sdk } from '@farcaster/miniapp-sdk';
+import { sdk, setup } from '@farcaster/miniapp-sdk';
 
 export default function EditorPage() {
   const { user, loading, token } = useAuth();
@@ -19,9 +19,11 @@ export default function EditorPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    // Fetch Farcaster context when component mounts
-    const fetchContext = async () => {
+    const initialize = async () => {
       try {
+        await setup();
+        await sdk.actions.ready();
+        
         const context = await sdk.context;
         if (context?.location) {
           setAppContext(context.location);
@@ -31,7 +33,7 @@ export default function EditorPage() {
       }
     };
     
-    fetchContext();
+    initialize();
   }, []);
 
   const generateCard = async () => {
@@ -206,7 +208,7 @@ export default function EditorPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Panel: Stats Selection */}
-          <div className="bg-gray-800 rounded-xl p-6">
+          <div className="bg-gray-800/70 backdrop-blur rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4 text-white">Your Stats</h2>
             <div className="grid grid-cols-2 gap-4">
               <StatBadge icon="✍️" value={user.casts} label="Casts" />
@@ -220,7 +222,7 @@ export default function EditorPage() {
           </div>
 
           {/* Center Panel: Card Preview */}
-          <div className="bg-gray-800 rounded-xl p-6 flex flex-col items-center">
+          <div className="bg-gray-800/70 backdrop-blur rounded-xl p-6 flex flex-col items-center">
             <h2 className="text-xl font-semibold mb-4 text-white">Card Preview</h2>
             <div className="w-full max-w-md border-2 border-gray-700 rounded-lg overflow-hidden">
               <canvas 
@@ -262,7 +264,7 @@ export default function EditorPage() {
           </div>
 
           {/* Right Panel: Theme Customizer */}
-          <div className="bg-gray-800 rounded-xl p-6">
+          <div className="bg-gray-800/70 backdrop-blur rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4 text-white">Customize Theme</h2>
             <div className="space-y-6">
               <div>
