@@ -28,6 +28,10 @@ const nextConfig = {
       {
         source: '/screenshot1.png',
         destination: '/public/screenshot1.png',
+      },
+      {
+        source: '/og-image.png',
+        destination: '/public/og-image.png',
       }
     ]
   },
