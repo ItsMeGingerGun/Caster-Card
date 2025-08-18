@@ -19,11 +19,8 @@ const Particles = () => {
     if (!canvasRef.current) return;
     
     const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    
-    // Set canvas size to match its display size
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
     
     const ctx = canvas.getContext('2d');
     if (ctx) {
@@ -56,9 +53,9 @@ const Particles = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
+    // Use the actual canvas dimensions
+    const width = canvas.width / window.devicePixelRatio;
+    const height = canvas.height / window.devicePixelRatio;
 
     ctx.clearRect(0, 0, width, height);
 
