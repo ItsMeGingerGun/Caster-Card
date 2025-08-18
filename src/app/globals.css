@@ -8,15 +8,8 @@
   --background-end-rgb: 0, 0, 0;
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background: linear-gradient(to bottom right, #0f172a, #000000);
-  /* Fix stacking context */
-  isolation: isolate;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -25,16 +18,16 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  /* Ensure proper stacking */
-  z-index: 0;
+  background: linear-gradient(
+    to bottom right, 
+    rgb(var(--background-start-rgb)), 
+    rgb(var(--background-end-rgb))
+  );
+  background-attachment: fixed;
 }
 
-/* Fix for absolute positioned elements */
-.relative-container {
-  position: relative;
-  z-index: 10;
-}
+/* Fix stacking context */
+isolation: isolate;
 
 /* Text clipping for gradient text */
 .bg-clip-text {
@@ -72,6 +65,27 @@ body {
   animation-delay: 4s;
 }
 
+/* Gradient animation utilities */
+.bg-size-200 {
+  background-size: 200% 200%;
+}
+
+.animate-gradient {
+  animation: gradient-animation 3s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Fix for gradient text in Safari */
 @supports (-webkit-background-clip: text) {
   .bg-clip-text {
@@ -102,4 +116,27 @@ body {
   justify-content: center;
   z-index: 9999; /* Above everything */
   background: linear-gradient(to bottom right, #0f172a, #000000);
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7c3aed;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6d28d9;
 }
