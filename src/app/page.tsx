@@ -27,15 +27,20 @@ const testimonials = [
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
+  const [sdkError, setSdkError] = useState(false);
 
   useEffect(() => {
     const initialize = async () => {
       try {
-       
-        await sdk.actions.ready();
-        setIsMounted(true);
+        // Check if we're in a Farcaster environment
+        if (typeof window !== 'undefined' && window.location !== window.parent.location) {
+          await sdk.actions.ready();
+        }
       } catch (error) {
         console.error('SDK initialization failed:', error);
+        setSdkError(true);
+      } finally {
+        setIsMounted(true);
       }
     };
 
@@ -71,7 +76,7 @@ export default function Home() {
       <Particles />
       
       {/* Navigation */}
-      <nav className="py-4 px-6 border-b border-gray-800 backdrop-blur-sm bg-black/30 relative z-10">
+      <nav className="py-4 px-6 border-b border-gray-800 backdrop-blur-sm bg-black/30 relative z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="text-2xl">🃏</span>
