@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext';
 import StatBadge from '../components/StatBadge';
 import { ScoreRadial } from '../components/ScoreRadial';
 import { saveAs } from 'file-saver';
-import { sdk, setup } from '@farcaster/miniapp-sdk';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function EditorPage() {
   const { user, loading, token } = useAuth();
@@ -21,7 +21,7 @@ export default function EditorPage() {
   useEffect(() => {
     const initialize = async () => {
       try {
-        await setup();
+        
         await sdk.actions.ready();
         
         const context = await sdk.context;
